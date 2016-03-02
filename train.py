@@ -1,6 +1,26 @@
 import numpy as np
 from random import shuffle
 
+class QuadraticCost(object):
+	@staticmethod
+	def cost(a,y):
+		# norm of a vector
+		return 0.5*(np.linalg.norm(a-y)**2)
+
+	@staticmethod
+	def delta(z,a,y):
+		return (a - y)*sigmoid_prime(z)
+
+class CrossEntropyCost(object):
+	@staticmethod
+	def cost(a,y):
+		# nan_to_num handles log values when a =~ 0 or 1.
+		return np.nan_to_num(-y*np.log(a) - (1 - y)*np.log(1 - a))
+
+	@staticmethod
+	def delta(z,a,y):
+		return (a - y)
+
 class NeuralNetwork(object):
 	'''Represents a Neural Network with:
 		1. sizes[i] representing the number of neurons in the ith layer
@@ -11,11 +31,12 @@ class NeuralNetwork(object):
 	   A Neural Network is initialised as NeuralNetwork(sizes), 
 		sizes = array having number of neurons in each layer, eg. NeuralNetwork([1,2,3])
 	'''
-	def __init__(self, sizes):
+	def __init__(self, sizes, cost=CrossEntropyCost):
 		self.layers = len(sizes)
 		self.sizes = sizes
 		self.biases = [np.random.randn(x,1) for x in sizes[1:]]
 		self.wts = [np.random.randn(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
+		self.cost = cost
 
 	def feedforward(self,inputs):
 		'''
@@ -26,7 +47,7 @@ class NeuralNetwork(object):
 			res = sigmoid(np.dot(w,res) + b)
 		return res
 
-	def SGD_MB(self,training_data,MBsize,eta,epochs,test):
+	def SGD(self,training_data,MBsize,eta,epochs,test,Lambda=0.0):
 		'''
 			Implements Stochastic Gradient Descent using Mini Batches,
 			does `epochs` number of iterations on the training data with 
@@ -34,13 +55,12 @@ class NeuralNetwork(object):
 		'''
 		for iteration in xrange(epochs):
 			print self.evaluate(test)
-			print self.wts, self.biases
 			shuffle(training_data)
 			mini_batches = [training_data[i:i + MBsize] for i in range(0,len(training_data),MBsize)]
 			for mini_batch in mini_batches:
-				self.train_network_on(mini_batch,eta)
+				self.train_network_on(mini_batch,eta,Lambda,len(training_data))
 
-	def train_network_on(self,batch,eta):
+	def train_network_on(self,batch,eta,Lambda,n):
 		'''
 			Updates the wts and biases of the Neural Network using 
 			Gradient Descent on a given set of `m` training examples, with
@@ -52,7 +72,7 @@ class NeuralNetwork(object):
 			delta_nabla_b, delta_nabla_w = self.backprop(x, y)
 			nabla_b = [nb+dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
 			nabla_w = [nw+dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]
-		self.wts = [w-(eta/len(batch))*nw 
+		self.wts = [(1 - eta*Lambda/n)*w - (eta/len(batch))*nw 
 						for w, nw in zip(self.wts, nabla_w)]
 		self.biases = [b-(eta/len(batch))*nb 
 						for b, nb in zip(self.biases, nabla_b)]
@@ -79,8 +99,7 @@ class NeuralNetwork(object):
 			activation = sigmoid(z)
 			activations.append(activation)
 		# backward pass
-		delta = self.cost_derivative(activations[-1], y) * \
-			sigmoid_prime(zs[-1])
+		delta = self.cost.delta(zs[-1],activations[-1], y)
 		nabla_b[-1] = delta
 		nabla_w[-1] = np.dot(delta, activations[-2].transpose())
 		# Here, l = 1 means the last layer of neurons, l = 2 is the
