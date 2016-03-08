@@ -25,24 +25,22 @@ def dilate(image, kernel):
     cv2.dilate(image, kernel)
     return image
 
+def clean_cell(cell):
+	kernel = np.ones((3,3),np.uint8)
+	cv2.erode(cell, kernel)
+	return cell
 
 def get_largest_contour(image):
     contours, h = cv2.findContours(
         image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     return max(contours, key=cv2.contourArea)
 
-def make_it_square(image,side_length=300):
+def make_it_square(image,side_length=306):
 	return cv2.resize(image, (side_length,side_length))
 
 def cut_out_sudoku_puzzle(image, contour):
     x, y, w, h = cv2.boundingRect(contour)
     return make_it_square(image[y:y + h, x:x + w])
-
-def get_piece(image,side_length=28):
-	return image[:side_length,:side_length]
-
-def write_piece(image, row_beg,col_beg,row_end,col_end):
-	cv2.imwrite('piece.jpg', image[row_beg:row_end,col_beg:col_end])
 
 def get_largest_connected_component(image):
 	res = None
@@ -114,6 +112,20 @@ def warp_perspective(rect,grid):
 	show(warp)
 	return make_it_square(warp)
 
+def get_cells(sudoku):
+	cells = []
+	W = sudoku.shape[0]
+	H = sudoku.shape[1]
+	cell_size = W/9
+	for r in range(0,W,cell_size):
+		row = []
+		for c in range(0,W,cell_size):
+			cell = make_it_square(sudoku[r:r + cell_size,c:c + cell_size],28)
+			row.append(cell)
+			show(cell)
+		cells.append(row)
+	return cells
+
 def get_sudoku_images(n=5):
     color_img = cv2.imread('sudoku1.jpg')					# read image
     gray_img = cv2.cvtColor(color_img,cv2.COLOR_BGR2GRAY)
@@ -123,7 +135,7 @@ def get_sudoku_images(n=5):
     image = thresholdify(image)
 
     # morphology the image to get accurate bounding rectangles
-    kernel = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]], np.uint8)
+    kernel = np.ones((3,3), np.uint8)
     image = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
 
     orig = image.copy()
@@ -136,6 +148,7 @@ def get_sudoku_images(n=5):
     app = approx(get_largest_contour(grid.copy()),grid.copy())
     corners = get_rectangle_corners(app)
     sudoku = warp_perspective(corners, sudoku)
+    cells = get_cells(sudoku)
     return orig, sudoku
 
 orig, out = get_sudoku_images()
