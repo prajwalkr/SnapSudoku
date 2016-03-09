@@ -1,5 +1,8 @@
 import cv2
 import numpy as np
+import train as t
+import pickle
+import os
 
 def show(img):
 	screen_res = 1280, 720
@@ -25,11 +28,6 @@ def dilate(image, kernel):
     cv2.dilate(image, kernel)
     return image
 
-def clean_cell(cell):
-	kernel = np.ones((3,3),np.uint8)
-	cv2.erode(cell, kernel)
-	return cell
-
 def get_largest_contour(image):
     contours, h = cv2.findContours(
         image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -49,16 +47,31 @@ def get_largest_connected_component(image):
 	visited = [[False for row in xrange(image.shape[0])] for col in xrange(image.shape[1])]
 	for row in xrange(image.shape[0]):
 		for col in xrange(image.shape[1]):
-			if visited[row][col] == False:
+			if visited[row][col] == False or image[row][col] > 250:
 				mask = np.zeros((image.shape[0] + 2,image.shape[1] + 2),np.uint8)
 				cv2.floodFill(image.copy(), mask, (row,col), (255,255,255))
 				if m < np.count_nonzero(mask):
 					m = np.count_nonzero(mask)
 					res = mask
 					mpt = (row,col)
+					#show(mask)
 				visited |= mask[1:-1,1:-1]
 	res *= 255
 	return res[1:-1,1:-1]
+
+def extract_digit(cell):
+	orig = cell.copy()
+	contours, h = cv2.findContours(
+	    cell, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+	for cnt in sorted(contours,key=cv2.contourArea,reverse=True):
+		cv2.drawContours(cell, [cnt], 0, (255,0,0),1)
+		cell = orig
+
+def clean(cell,n=5):
+	for _ in range(n):
+		kernel = np.ones((3,3),np.uint8)
+		cv2.erode(cell, kernel)
+	return 255 - cell
 
 def approx(cnt,grid):
 	peri = cv2.arcLength(cnt, True)
@@ -109,7 +122,6 @@ def warp_perspective(rect,grid):
 	# the perspective to grab the screen
 	M = cv2.getPerspectiveTransform(rect, dst)
 	warp = cv2.warpPerspective(grid, M, (maxWidth, maxHeight))
-	show(warp)
 	return make_it_square(warp)
 
 def get_cells(sudoku):
@@ -121,36 +133,95 @@ def get_cells(sudoku):
 		row = []
 		for c in range(0,W,cell_size):
 			cell = make_it_square(sudoku[r:r + cell_size,c:c + cell_size],28)
+			cell = clean(cell)
 			row.append(cell)
-			show(cell)
+			#show(cell)
 		cells.append(row)
 	return cells
 
+def evaluate(cells):
+	net = None
+	with open('test','rb') as f:
+		net = pickle.load(f)
+
+	res = []
+	for i,r in enumerate(cells):
+		row = []
+		for j,image in enumerate(r):
+			im = image.ravel().astype(np.float64)
+			im = 1 - im*(1.0/255.0)
+			im = np.reshape(im, (784,1))
+			with open('mat.txt','w') as f:
+				f.write('\n'.join(str(i) for i in im))
+			#outputs = net.feedforward(im)
+			#print (i,j),max(outputs),np.argmax(outputs)
+			x = raw_input()
+
+def update_dataset(cells):
+	data = None
+	if os.path.exists('/train/dataset'):
+		with open('test','rb') as f:
+			data = pickle.load(f)
+	data = [] if data is None else data
+	for r in cells:
+		for image in r:
+			show(image)
+			im = image.ravel().astype(np.float64)
+			im = 1 - im*(1.0/255.0)
+			im = np.reshape(im, (784,1))
+			res = None
+			while res not in xrange(-1,10):
+				try:
+					res = int(raw_input())
+				except:
+					pass
+			data.append(im)
+	with open('/train/dataset') as f:
+		pickle.dump(data, f)
+
+def remove_lines(sudoku,grid):
+	H = grid.shape[0]
+	W = grid.shape[1]
+	for i in xrange(W):
+		for j in xrange(H):
+			if grid[i][j] != 0:
+				sudoku[i][j] = 0
+	return sudoku
+
 def get_sudoku_images(n=5):
-    color_img = cv2.imread('sudoku1.jpg')					# read image
-    gray_img = cv2.cvtColor(color_img,cv2.COLOR_BGR2GRAY)
-    image = img = cv2.medianBlur(gray_img, 5)			# blur the image to reduce noise
+	for i in range(22):
+	    color_img = cv2.imread('1.jpg')					# read image
+	    gray_img = cv2.cvtColor(color_img,cv2.COLOR_BGR2GRAY)
+	    image = img = cv2.medianBlur(gray_img, 5)			# blur the image to reduce noise
 
-    # adaptive-threshold the image `n` times
-    image = thresholdify(image)
+	    # adaptive-threshold the image `n` times
+	    image = thresholdify(image)
 
-    # morphology the image to get accurate bounding rectangles
-    kernel = np.ones((3,3), np.uint8)
-    image = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+	    # morphology the image to get accurate bounding rectangles
+	    kernel = np.ones((3,3), np.uint8)
+	    image = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
 
-    orig = image.copy()
-    # crop out the sudoku puzzle from the image
-    contour = get_largest_contour(image)
-    sudoku = cut_out_sudoku_puzzle(orig, contour)
+	    orig = image.copy()
+	    # crop out the sudoku puzzle from the image
+	    contour = get_largest_contour(image)
+	    sudoku = cut_out_sudoku_puzzle(orig, contour)
 
-    orig = sudoku.copy()
-    grid = get_largest_connected_component(sudoku.copy())
-    app = approx(get_largest_contour(grid.copy()),grid.copy())
-    corners = get_rectangle_corners(app)
-    sudoku = warp_perspective(corners, sudoku)
-    cells = get_cells(sudoku)
-    return orig, sudoku
+	    orig = sudoku.copy()
+	    grid = get_largest_connected_component(sudoku.copy())
+	    app = approx(get_largest_contour(grid.copy()),grid.copy())
+	    corners = get_rectangle_corners(app)
+	    sudoku = warp_perspective(corners, sudoku)
+	    grid = warp_perspective(corners, grid)
+	    #show(grid)
+	    #show(sudoku)
+	    sudoku = remove_lines(sudoku,grid)
+	    #show(sudoku)
+	    cells = get_cells(sudoku)
+	    #evaluate(cells)
+    return orig,sudoku
 
-orig, out = get_sudoku_images()
-cv2.imwrite('orig.jpg', orig)
-cv2.imwrite(str(101) + '.jpg', out)
+def main():
+	orig, out = get_sudoku_images()
+	'''cv2.imwrite('orig.jpg', orig)
+				cv2.imwrite(str(101) + '.jpg', out)'''
+main()
