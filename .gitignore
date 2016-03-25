@@ -1,1 +1,5 @@
 *.pyc
+/train/v1_test.tar.bz2
+/train/v1_training.tar.bz2
+.gitignore
+.gitignore.swp

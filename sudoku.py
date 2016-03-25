@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import train as t
 import pickle
+import Queue
 from os import path
 
 
@@ -13,10 +14,10 @@ def show(img):
     window_width = int(img.shape[1] * scale)
     window_height = int(img.shape[0] * scale)
 
-    cv2.namedWindow('dst_rt', cv2.WINDOW_NORMAL)
-    cv2.resizeWindow('dst_rt', window_width, window_height)
+    cv2.namedWindow('Image', cv2.WINDOW_NORMAL)
+    cv2.resizeWindow('Image', window_width, window_height)
 
-    cv2.imshow('dst_rt', img)
+    cv2.imshow('Image', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
@@ -62,27 +63,43 @@ def is_greater_connected_component(mask, m, half_image_area):
     component_area = cv2.contourArea(get_largest_contour(mask))
     return (m < pixel_count and component_area > half_image_area)
 
+def bfs(i,j,num):
+    global graph,visited,component,W,H
+    q = Queue.Queue()
+    q.put((i,j))
+    while not q.empty():
+        i,j = q.get()
+        if i not in range(0,H) or j not in range(0,W) or graph[i][j] != 255 or visited[i][j]:
+            continue
+        component[i][j] = num
+        visited[i][j] = True
+        for di in [-1,0,1]:
+            for dj in [-1,0,1]:
+                 q.put((i + di,j + dj))
 
-def get_largest_connected_component(image):
-    image = binarized(image)
-    res = None
-    m = 0
+def largest_connected_component(image):
+    global graph,visited,component,W,H
+    graph = image.copy()
     W,H = image.shape
-    half_image_area = area(image) / 2.00
-    for row in xrange(H):
-        for col in xrange(W):
-            if image[row][col] == 255:
-                mask = np.zeros(
-                    (W + 2, H + 2), np.uint8)
-                flags = cv2.FLOODFILL_FIXED_RANGE
-                cv2.floodFill(image.copy(), mask, (row, col),
-                              (255, 255, 255), flags=flags)
-                if is_greater_connected_component(mask, m, half_image_area):
-                    m = np.count_nonzero(mask)
-                    res = mask
-    res *= 255
-    return res[1:-1, 1:-1]
-
+    component = [[None for _ in xrange(H)] for _ in range(W)]
+    visited = [[False for _ in xrange(H)] for _ in range(W)]
+    num = 0
+    for i in range(H):
+        for j in range(W):
+            if not visited[i][j]:
+                bfs(i, j, num)
+                num += 1
+    sizes = [0 for _ in range(num)] 
+    for row in component:
+        for cell in row:
+            if cell is not None:
+                sizes[cell] += 1
+    largest = sizes.index(max(sizes))
+    for i in range(H):
+        for j in range(W):
+            component[i][j] = 255 if component[i][j] == largest else 0
+    component = np.asarray(component,dtype=np.uint8)
+    return component
 
 def extract_digit(cell):
     orig = cell.copy()
@@ -239,26 +256,25 @@ def main():
         #    path.join(IMAGE_DIR, '{}.jpg'.format(str(i))))		# read image
         color_img = cv2.imread('image1.jpg')
         if color_img is None:
-            raise Exception('Image not loaded')
+            raise IOError('Image not loaded')
         gray_img = cv2.cvtColor(color_img, cv2.COLOR_BGR2GRAY)
         # blur the image to reduce noise
         image = img = cv2.medianBlur(gray_img, 5)
 
         # adaptive-threshold the image `n` times
         image = thresholdify(image)
-
         # morphology the image to get accurate bounding rectangles
-        kernel = np.ones((3, 3), np.uint8)
-        image = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+        #kernel = np.ones((3, 3), np.uint8)
+        #image = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
 
         orig = image.copy()
         # crop out the sudoku puzzle from the image
         contour = get_largest_contour(image)
         sudoku = cut_out_sudoku_puzzle(orig, contour)
-        print area(sudoku)
-        show(sudoku)
         orig = sudoku.copy()
-        grid = get_largest_connected_component(sudoku.copy())
+        print "Executing CC"
+        grid = largest_connected_component(sudoku.copy())
+        show(grid)
         print cv2.contourArea(get_largest_contour(grid.copy()))
         show(grid)
         app = approx(get_largest_contour(grid.copy()), grid.copy())
