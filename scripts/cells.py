@@ -7,7 +7,7 @@ from digit import Digit
 
 class Cells(object):
     '''
-    Extracts each cell from the gridLess image obtained
+    Extracts each cell from the sudoku grid obtained
     from the Extractor
     '''
 
