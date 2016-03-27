@@ -4,7 +4,7 @@ import numpy as np
 
 class Helpers(object):
     '''
-            Image manipulation helper functions
+    Image manipulation helper functions
     '''
 
     def show(self, img, windowName='Image'):
@@ -24,8 +24,13 @@ class Helpers(object):
 
     def thresholdify(self, img):
         img = cv2.adaptiveThreshold(img.astype(np.uint8), 255, cv2.ADAPTIVE_THRESH_MEAN_C,
-                                    cv2.THRESH_BINARY, 41, 3)
+                                    cv2.THRESH_BINARY, 11, 3)
         return 255 - img
+
+    def Canny(self, image):
+        edges = cv2.Canny(image, 100, 200)
+        self.show(edges)
+        return edges
 
     def dilate(self, image, kernel):
         cv2.dilate(image, kernel)
@@ -41,12 +46,6 @@ class Helpers(object):
 
     def area(self, image):
         return float(image.shape[0] * image.shape[1])
-
-    def clean(self, cell, n=5):
-        for _ in range(n):
-            kernel = np.ones((3, 3), np.uint8)
-            cv2.erode(cell, kernel)
-        return 255 - cell
 
     def cut_out_sudoku_puzzle(self, image, contour):
         x, y, w, h = cv2.boundingRect(contour)

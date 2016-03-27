@@ -2,10 +2,11 @@ import cv2
 import numpy as np
 import Queue
 
-class Grid(object):
+
+class Digit(object):
     '''
-            Extracts out the gridlines from a sudoku image and returns Grid obj.
-            Implements the classic `Largest connected component` algorithm.
+    Extracts the digit from a cell.
+    Implements the classic `Largest connected component` algorithm.
     '''
 
     def __init__(self, image):
@@ -13,10 +14,10 @@ class Grid(object):
         self.W, self.H = self.graph.shape
         self.visited = [[False for _ in xrange(
             self.H)] for _ in xrange(self.W)]
-        self.grid = [[None for _ in xrange(self.H)] for _ in xrange(self.W)]
-        self.buildGrid()
+        self.digit = [[None for _ in xrange(self.H)] for _ in xrange(self.W)]
+        self.buildDigit()
 
-    def buildGrid(self):
+    def buildDigit(self):
         componentId = 0
         for i in xrange(self.H):
             for j in xrange(self.W):
@@ -24,15 +25,15 @@ class Grid(object):
                     self.bfs(i, j, componentId)
                     componentId += 1
         componentSizes = [0 for _ in xrange(componentId)]
-        for row in self.grid:
+        for row in self.digit:
             for cell in row:
                 if cell is not None:
                     componentSizes[cell] += 1
         largest = componentSizes.index(max(componentSizes))
         for i in xrange(self.H):
             for j in xrange(self.W):
-                self.grid[i][j] = 255 if self.grid[i][j] == largest else 0
-        self.grid = np.asarray(self.grid, dtype=np.uint8)
+                self.digit[i][j] = 255 if self.digit[i][j] == largest else 0
+        self.digit = np.asarray(self.digit, dtype=np.uint8)
 
     def bfs(self, i, j, num):
         q = Queue.Queue()
@@ -45,8 +46,8 @@ class Grid(object):
             invalidPixel = invalidCell or self.graph[i][j] != 255
             if invalidPixel or self.visited[i][j]:
                 continue
-            self.grid[i][j] = num
+            self.digit[i][j] = num
             self.visited[i][j] = True
-            q.put((i, j + 1))
-            for dj in [-1, 0, 1]:
-                q.put((i + 1, j + dj))
+            for di in [-1, 0, 1]:
+                for dj in [-1, 0, 1]:
+                    q.put((i + di, j + dj))
