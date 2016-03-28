@@ -19,8 +19,10 @@ class Digit(object):
 
     def buildDigit(self):
         componentId = 0
-        for i in xrange(self.H):
-            for j in xrange(self.W):
+        A,C = self.H/4, 3*self.H/4 + 1
+        B,D = self.W/4, 3*self.W/4 + 1
+        for i in xrange(A,C):
+            for j in xrange(B,D):
                 if not self.visited[i][j]:
                     self.bfs(i, j, componentId)
                     componentId += 1

@@ -13,7 +13,7 @@ class Extractor(object):
 
     def __init__(self, path):
         '''
-        1. Basic image manipulations - blur, thresholding.
+        1. Basic image manipulations - Thresholding.
         2. Crop out approx. sudoku puzzle (contour)
         3. Get the grid square vertices:
            3.1. Get the largest contour of the image.
@@ -41,7 +41,6 @@ class Extractor(object):
     def preprocess(self):
     	print 'Preprocessing...',
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-        self.image = cv2.medianBlur(self.image, 5)
         self.image = self.helpers.thresholdify(self.image)
         print 'done.'
 

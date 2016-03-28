@@ -3,7 +3,7 @@ from os import path
 from scripts.sudokuExtractor import Extractor 
 
 def getImagePath():
-	image_path = path.abspath('train/b.jpg')
+	image_path = path.abspath('train/image1.jpg')
 	return image_path
 
 def main():
