@@ -3,3 +3,4 @@
 /train/v1_training.tar.bz2
 .gitignore
 .gitignore.swp
+mnist.pkl.gz

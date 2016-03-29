@@ -134,12 +134,20 @@ class Helpers(object):
 
     def rowShift(self, image, start, end, length):
         shifted = np.zeros(image.shape)
+        if start + length < 0:  length = -start
+        elif end + length >= image.shape[0]:
+            length = image.shape[0] - 1 - end
+
         for row in xrange(start, end + 1):
             shifted[row + length] = image[row]
         return shifted
 
     def colShift(self, image, start, end, length):
         shifted = np.zeros(image.shape)
+        if start + length < 0:  length = -start
+        elif end + length >= image.shape[1]:
+            length = image.shape[1] - 1 - end
+            
         for col in xrange(start, end + 1):
             shifted[:, col + length] = image[:, col]
         return shifted

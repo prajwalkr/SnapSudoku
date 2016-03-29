@@ -1,5 +1,5 @@
 import numpy as np
-import cv2
+import cv2,pickle
 
 from helpers import Helpers
 from digit import Digit
@@ -28,11 +28,12 @@ class Cells(object):
                     sudoku[r:r + cell_size, c:c + cell_size], 28)
                 cell = self.clean(cell)
                 digit = Digit(cell).digit
-                self.helpers.show(digit, 'Before centering')
+                #self.helpers.show(digit, 'Buggy')
                 digit = self.centerDigit(digit)
-                self.helpers.show(digit, 'After centering')
-                row.append(digit)
+                #self.helpers.show(digit, 'After centering')
+                row.append(digit//255)
             cells.append(row)
+        pickle.dump(cells, open('save','w'))
         return cells
 
     def clean(self, cell):
