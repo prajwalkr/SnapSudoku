@@ -107,3 +107,39 @@ class Helpers(object):
         M = cv2.getPerspectiveTransform(rect, dst)
         warp = cv2.warpPerspective(grid, M, (maxWidth, maxHeight))
         return self.make_it_square(warp)
+
+    def getTopLine(self, image):
+        for i, row in enumerate(image):
+            if np.any(row):
+                return i
+        return None
+
+    def getBottomLine(self, image):
+        for i in xrange(image.shape[0] - 1, -1, -1):
+            if np.any(image[i]):
+                return i
+        return None
+
+    def getLeftLine(self, image):
+        for i in xrange(image.shape[1]):
+            if np.any(image[:, i]):
+                return i
+        return None
+
+    def getRightLine(self, image):
+        for i in xrange(image.shape[1] - 1, -1, -1):
+            if np.any(image[:, i]):
+                return i
+        return None
+
+    def rowShift(self, image, start, end, length):
+        shifted = np.zeros(image.shape)
+        for row in xrange(start, end + 1):
+            shifted[row + length] = image[row]
+        return shifted
+
+    def colShift(self, image, start, end, length):
+        shifted = np.zeros(image.shape)
+        for col in xrange(start, end + 1):
+            shifted[:, col + length] = image[:, col]
+        return shifted

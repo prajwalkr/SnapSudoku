@@ -28,8 +28,10 @@ class Cells(object):
                     sudoku[r:r + cell_size, c:c + cell_size], 28)
                 cell = self.clean(cell)
                 digit = Digit(cell).digit
+                self.helpers.show(digit, 'Before centering')
+                digit = self.centerDigit(digit)
+                self.helpers.show(digit, 'After centering')
                 row.append(digit)
-                self.helpers.show(digit,'Digit')
             cells.append(row)
         return cells
 
@@ -39,3 +41,30 @@ class Cells(object):
         cell = self.helpers.make_it_square(cell[y:y + h, x:x + w], 28)
         cell = 255 * (cell / 150)
         return cell
+
+    def centerDigit(self, digit):
+        digit = self.centerX(digit)
+        digit = self.centerY(digit)
+        return digit
+
+    def centerX(self, digit):
+        topLine = self.helpers.getTopLine(digit)
+        bottomLine = self.helpers.getBottomLine(digit)
+        if topLine is None or bottomLine is None:
+            return digit
+        centerLine = (topLine + bottomLine) >> 1
+        imageCenter = digit.shape[0] >> 1
+        digit = self.helpers.rowShift(
+            digit, start=topLine, end=bottomLine, length=imageCenter - centerLine)
+        return digit
+
+    def centerY(self, digit):
+        leftLine = self.helpers.getLeftLine(digit)
+        rightLine = self.helpers.getRightLine(digit)
+        if leftLine is None or rightLine is None:
+            return digit
+        centerLine = (leftLine + rightLine) >> 1
+        imageCenter = digit.shape[1] >> 1
+        digit = self.helpers.colShift(
+            digit, start=leftLine, end=rightLine, length=imageCenter - centerLine)
+        return digit

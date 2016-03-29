@@ -25,10 +25,10 @@ class Extractor(object):
         self.helpers = Helpers()  # Image helpers
         self.image = self.loadImage(path)
         self.preprocess()
-        self.helpers.show(self.image,'After Preprocessing')
+        self.helpers.show(self.image, 'After Preprocessing')
         sudoku = self.cropSudoku()
         sudoku = self.straighten(sudoku)
-        self.helpers.show(sudoku,'Final Sudoku grid')
+        self.helpers.show(sudoku, 'Final Sudoku grid')
         self.cells = Cells(sudoku).cells
 
     def loadImage(self, path):
@@ -39,21 +39,21 @@ class Extractor(object):
         return color_img
 
     def preprocess(self):
-    	print 'Preprocessing...',
+        print 'Preprocessing...',
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         self.image = self.helpers.thresholdify(self.image)
         print 'done.'
 
     def cropSudoku(self):
-    	print 'Cropping out Sudoku...',
+        print 'Cropping out Sudoku...',
         contour = self.helpers.largestContour(self.image.copy())
         sudoku = self.helpers.cut_out_sudoku_puzzle(self.image.copy(), contour)
         print 'done.'
         return sudoku
 
     def straighten(self, sudoku):
-    	print 'Straightening image...',
-    	largest = self.helpers.largestContour(sudoku.copy())
+        print 'Straightening image...',
+        largest = self.helpers.largestContour(sudoku.copy())
         app = self.helpers.approx(largest)
         corners = self.helpers.get_rectangle_corners(app)
         sudoku = self.helpers.warp_perspective(corners, sudoku)
