@@ -25,10 +25,10 @@ class Extractor(object):
         self.helpers = Helpers()  # Image helpers
         self.image = self.loadImage(path)
         self.preprocess()
-        self.helpers.show(self.image, 'After Preprocessing')
+        #self.helpers.show(self.image,'After Preprocessing')
         sudoku = self.cropSudoku()
         sudoku = self.straighten(sudoku)
-        self.helpers.show(sudoku, 'Final Sudoku grid')
+        #self.helpers.show(sudoku,'Final Sudoku grid')
         self.cells = Cells(sudoku).cells
 
     def loadImage(self, path):
@@ -42,6 +42,8 @@ class Extractor(object):
         print 'Preprocessing...',
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         self.image = self.helpers.thresholdify(self.image)
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
+        self.image = cv2.morphologyEx(self.image, cv2.MORPH_CLOSE, kernel)
         print 'done.'
 
     def cropSudoku(self):

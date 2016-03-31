@@ -1,5 +1,6 @@
 import numpy as np
-import cv2,pickle
+import cv2
+import pickle
 
 from helpers import Helpers
 from digit import Digit
@@ -24,23 +25,27 @@ class Cells(object):
         for r in range(0, W, cell_size):
             row = []
             for c in range(0, W, cell_size):
-                cell = self.helpers.make_it_square(
-                    sudoku[r:r + cell_size, c:c + cell_size], 28)
+                cell = sudoku[r:r + cell_size, c:c + cell_size]
+                cell = self.helpers.make_it_square(cell, 28)
+                #self.helpers.show(cell, 'Before clean')
                 cell = self.clean(cell)
                 digit = Digit(cell).digit
                 #self.helpers.show(digit, 'Buggy')
+                #self.helpers.show(digit, 'After clean')
                 digit = self.centerDigit(digit)
-                #self.helpers.show(digit, 'After centering')
-                row.append(digit//255)
+                self.helpers.show(digit, 'After centering')
+                row.append(digit // 255)
             cells.append(row)
-        pickle.dump(cells, open('save','w'))
+        pickle.dump(cells, open('save', 'w'))
         return cells
 
     def clean(self, cell):
         contour = self.helpers.largestContour(cell.copy())
         x, y, w, h = cv2.boundingRect(contour)
         cell = self.helpers.make_it_square(cell[y:y + h, x:x + w], 28)
-        cell = 255 * (cell / 150)
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
+        cell = cv2.morphologyEx(cell, cv2.MORPH_CLOSE, kernel)
+        cell = 255 * (cell / 130)
         return cell
 
     def centerDigit(self, digit):

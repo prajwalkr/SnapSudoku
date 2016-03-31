@@ -8,7 +8,7 @@ class Helpers(object):
     '''
 
     def show(self, img, windowName='Image'):
-        screen_res = 1280, 720
+        screen_res = 1280.0, 720.0
         scale_width = screen_res[0] / img.shape[1]
         scale_height = screen_res[1] / img.shape[0]
         scale = min(scale_width, scale_height)
@@ -49,7 +49,8 @@ class Helpers(object):
 
     def cut_out_sudoku_puzzle(self, image, contour):
         x, y, w, h = cv2.boundingRect(contour)
-        return self.make_it_square(image[y:y + h, x:x + w])
+        image = image[y:y + h, x:x + w]
+        return self.make_it_square(image, min(image.shape))
 
     def binarized(self, image):
         for i in xrange(image.shape[0]):
@@ -134,7 +135,8 @@ class Helpers(object):
 
     def rowShift(self, image, start, end, length):
         shifted = np.zeros(image.shape)
-        if start + length < 0:  length = -start
+        if start + length < 0:
+            length = -start
         elif end + length >= image.shape[0]:
             length = image.shape[0] - 1 - end
 
@@ -144,10 +146,11 @@ class Helpers(object):
 
     def colShift(self, image, start, end, length):
         shifted = np.zeros(image.shape)
-        if start + length < 0:  length = -start
+        if start + length < 0:
+            length = -start
         elif end + length >= image.shape[1]:
             length = image.shape[1] - 1 - end
-            
+
         for col in xrange(start, end + 1):
             shifted[:, col + length] = image[:, col]
         return shifted
