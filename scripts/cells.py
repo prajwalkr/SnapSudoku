@@ -22,8 +22,10 @@ class Cells(object):
         cells = []
         W, H = sudoku.shape
         cell_size = W / 9
+        i,j = 0,0
         for r in range(0, W, cell_size):
             row = []
+            j = 0
             for c in range(0, W, cell_size):
                 cell = sudoku[r:r + cell_size, c:c + cell_size]
                 cell = self.helpers.make_it_square(cell, 28)
@@ -34,8 +36,9 @@ class Cells(object):
                 digit = self.centerDigit(digit)
                 #self.helpers.show(digit, 'After centering')
                 row.append(digit // 255)
+                j += 1
             cells.append(row)
-        pickle.dump(cells, open('save', 'w'))
+            i += 1
         return cells
 
     def clean(self, cell):
