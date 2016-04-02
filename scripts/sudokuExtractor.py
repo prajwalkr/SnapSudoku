@@ -21,14 +21,19 @@ class Extractor(object):
            3.3. Compute the grid corners.
         5. Do a Warp perspective on the sudoku image. 
         6. We will extract cells from this, by slicing the sudoku grid evenly.
+        7. Digit isolation in cell is done through a series of steps:
+            7.1. Extracting the largest connected component in the image,
+                 giving more priority to the center pixels.
+            7.2. Removing all major noise in the cell. 
+            7.3. Centering of digits after extraction. 
         '''
         self.helpers = Helpers()  # Image helpers
         self.image = self.loadImage(path)
         self.preprocess()
-        #self.helpers.show(self.image,'After Preprocessing')
+        #self.helpers.show(self.image, 'After Preprocessing')
         sudoku = self.cropSudoku()
         sudoku = self.straighten(sudoku)
-        #self.helpers.show(sudoku,'Final Sudoku grid')
+        #self.helpers.show(sudoku, 'Final Sudoku grid')
         self.cells = Cells(sudoku).cells
 
     def loadImage(self, path):
@@ -55,7 +60,7 @@ class Extractor(object):
 
     def straighten(self, sudoku):
         print 'Straightening image...',
-        largest = self.helpers.largestContour(sudoku.copy())
+        largest = self.helpers.largest4SideContour(sudoku.copy())
         app = self.helpers.approx(largest)
         corners = self.helpers.get_rectangle_corners(app)
         sudoku = self.helpers.warp_perspective(corners, sudoku)

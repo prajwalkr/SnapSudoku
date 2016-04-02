@@ -39,7 +39,15 @@ class Helpers(object):
     def largestContour(self, image):
         contours, h = cv2.findContours(
             image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        return max(contours, key=cv2.contourArea)
+        return max(contours,key=cv2.contourArea)
+    def largest4SideContour(self, image):
+        contours, h = cv2.findContours(
+            image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours = sorted(contours,key=cv2.contourArea,reverse=True)
+        for cnt in contours:
+            if len(self.approx(cnt)) == 4:
+                 return cnt
+        return None
 
     def make_it_square(self, image, side_length=306):
         return cv2.resize(image, (side_length, side_length))

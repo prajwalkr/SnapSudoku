@@ -4,7 +4,7 @@ from scripts.sudokuExtractor import Extractor
 
 
 def getImagePath():
-    image_path = path.abspath('train/image210.jpg')
+    image_path = path.abspath('train/test1.jpg')
     return image_path
 
 

@@ -30,10 +30,9 @@ class Cells(object):
                 #self.helpers.show(cell, 'Before clean')
                 cell = self.clean(cell)
                 digit = Digit(cell).digit
-                #self.helpers.show(digit, 'Buggy')
                 #self.helpers.show(digit, 'After clean')
                 digit = self.centerDigit(digit)
-                self.helpers.show(digit, 'After centering')
+                #self.helpers.show(digit, 'After centering')
                 row.append(digit // 255)
             cells.append(row)
         pickle.dump(cells, open('save', 'w'))

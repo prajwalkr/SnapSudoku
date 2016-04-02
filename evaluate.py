@@ -2,8 +2,6 @@ import pickle as pck
 import numpy as np
 from pprint import pprint
 
-from train import NeuralNetwork
-
 net = pck.load(open('net', 'r'))
 res = [[None for _ in range(9)] for _ in range(9)]
 cells = pck.load(open('save', 'r'))

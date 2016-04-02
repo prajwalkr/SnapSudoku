@@ -4,3 +4,4 @@
 .gitignore
 .gitignore.swp
 mnist.pkl.gz
+save
