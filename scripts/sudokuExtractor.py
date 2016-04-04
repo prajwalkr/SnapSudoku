@@ -9,31 +9,18 @@ from cells import Cells
 class Extractor(object):
     '''
         Stores and manipulates the input image to extract the Sudoku puzzle
+        all the way to the cells
     '''
 
     def __init__(self, path):
-        '''
-        1. Basic image manipulations - Thresholding.
-        2. Crop out approx. sudoku puzzle (contour)
-        3. Get the grid square vertices:
-           3.1. Get the largest contour of the image.
-           3.2. Get the largest bounding rectangle within the contour.
-           3.3. Compute the grid corners.
-        5. Do a Warp perspective on the sudoku image. 
-        6. We will extract cells from this, by slicing the sudoku grid evenly.
-        7. Digit isolation in cell is done through a series of steps:
-            7.1. Extracting the largest connected component in the image,
-                 giving more priority to the center pixels.
-            7.2. Removing all major noise in the cell. 
-            7.3. Centering of digits after extraction. 
-        '''
         self.helpers = Helpers()  # Image helpers
         self.image = self.loadImage(path)
         self.preprocess()
-        #self.helpers.show(self.image, 'After Preprocessing')
+        self.helpers.show(self.image, 'After Preprocessing')
         sudoku = self.cropSudoku()
+        self.helpers.show(sudoku, 'After Cropping out grid')
         sudoku = self.straighten(sudoku)
-        #self.helpers.show(sudoku, 'Final Sudoku grid')
+        self.helpers.show(sudoku, 'Final Sudoku grid')
         self.cells = Cells(sudoku).cells
 
     def loadImage(self, path):

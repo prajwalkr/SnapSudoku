@@ -7,7 +7,7 @@ from sudokuExtractor import Extractor
 
 class Builder(object):
     '''
-    Builds dataset of images in a folder.
+    Builds dataset from images in a folder.
     '''
 
     def __init__(self, imgDir=None, rebuild=False):
@@ -15,7 +15,7 @@ class Builder(object):
             ROOT = os.path.dirname(os.getcwd())
             self.imgDir = os.path.join(ROOT, 'train/')
         else:
-            self.imgDir = imgDir
+            self.imgDir = os.path.abspath(imgDir)
 
         self.usedSet = dict()
         if rebuild == False:

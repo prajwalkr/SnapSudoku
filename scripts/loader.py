@@ -2,10 +2,10 @@ import pickle as pck
 
 from train import NeuralNetwork
 
-training = pck.load(open('train','r'))
-testing = pck.load(open('test','r'))
+training = pck.load(open('train', 'r'))
+testing = pck.load(open('test', 'r'))
 
-net = NeuralNetwork([784,30,10])
-net.SGD(training, 2, 0.05, 300, testing,0.5)
+net = NeuralNetwork([784, 30, 10])
+net.SGD(training, 1, 0.05, 3 * len(training), testing, 0.5)
 
-pck.dump(net, open('../net','w'))
+pck.dump((net.sizes, net.biases, net.wts), open('../networks/net', 'w'))

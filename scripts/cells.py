@@ -22,7 +22,7 @@ class Cells(object):
         cells = []
         W, H = sudoku.shape
         cell_size = W / 9
-        i,j = 0,0
+        i, j = 0, 0
         for r in range(0, W, cell_size):
             row = []
             j = 0
