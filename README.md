@@ -8,14 +8,20 @@ SnapSudoku
  TODO:
 ---------
  - Add `code to solve` the Sudoku from the predicted output grid.
+ - Add proper exception handling, only a basic working model created.
  - Improve algorithm to get better Sudoku Grid extraction, make it `more robust against blurs` .
  - Improve `empty cell detection`. Only a basic logic is used right now. 
  - Improve accuracy by checking and removing same digits predicted in the same row/column. 
-
-> How to use: 
+How to use: 
+----------
+After cloning the repo, in the SnapSudoku directory, enter the following in the Terminal:
 
     python sudoku.py <path-to-input-image>
 
+Note: OpenCV for Python must be installed. 
+
+Working:
+-------
 > Here's a Sudoku image from a smartphone:
 
 ![Input Sudoku Image](https://lh3.googleusercontent.com/-rGpsVTsqkYU/VwysnNV6U4I/AAAAAAAAG00/1XVCxhPkVzMTugwy53PUTVu76JtywthyQCLcB/s1000/test1.jpg "test1.jpg")![](blob:https%3A//drive.google.com/7556d1d6-752d-4e86-b913-8373d50ebe41) 
@@ -42,7 +48,7 @@ Algorithm
 
 > The only 3rd party library required is  *OpenCV*. The Neural Network created was trained with around 250 digits. The constants used in the training phase, the training data-set is in this repository itself. 
 
-Here are some images through the process:
+Here are some illustrations of the different stages:
 -------
 
 > After Preprocessing:
