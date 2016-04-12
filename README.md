@@ -34,10 +34,6 @@ Algorithm
 > 6. Digit isolation in cell is done through a series of steps:
     6.1. Extract the **largest connected component** in the image, giving more *priority to the center pixels*.
     6.2. Removing all major noise in the cell. 
-
-     *Here's a typical empty cell after cleaning:*
-     
-    
 > 7.  Predict Digits using a Neural Network. 
 
 > The only 3rd party library required is  *OpenCV*. The Neural Network created was trained with around 250 digits. The constants used in the training phase, the training data-set is in this repository itself. 
