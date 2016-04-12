@@ -5,8 +5,8 @@ SnapSudoku
 
 
 ----------
- #### <i class="icon-pencil"></i> TODO:
-
+ TODO:
+---------
  - Add `code to solve` the Sudoku from the predicted output grid.
  - Improve algorithm to get better Sudoku Grid extraction, make it `more robust against blurs` .
  - Improve `empty cell detection`. Only a basic logic is used right now. 
@@ -29,14 +29,14 @@ Algorithm
 
  > 1. Basic image preprocessing - **Thresholding**.
  > 2. Crop out approx. Sudoku puzzle (Largest contour)
- > 3. Get the grid square vertices: *(a better way of doing this is required!)*
-   3.1. Get the **largest contour** of the image.
-   3.2. Get the largest **bounding rectangle** within the contour.
+ > 3. Get the grid square vertices: *(a better way of doing this is required!)* </br>
+   3.1. Get the **largest contour** of the image.</br>
+   3.2. Get the largest **bounding rectangle** within the contour.</br>
    3.3. Compute the grid corners. 
 > 4. Do a **Warp perspective** on the sudoku image
 > 5. We will extract cells from this, by slicing the sudoku grid evenly.
-> 6. Digit isolation in cell is done through a series of steps:
-    6.1. Extract the **largest connected component** in the image, giving more *priority to the center pixels*.
+> 6. Digit isolation in cell is done through a series of steps: </br>
+    6.1. Extract the **largest connected component** in the image, giving more *priority to the center pixels*. </br>
     6.2. Removing all major noise in the cell. 
 > 7.  Predict Digits using a Neural Network. 
 
