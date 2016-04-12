@@ -12,6 +12,7 @@ SnapSudoku
  - Improve algorithm to get better Sudoku Grid extraction, make it `more robust against blurs` .
  - Improve `empty cell detection`. Only a basic logic is used right now. 
  - Improve accuracy by checking and removing same digits predicted in the same row/column. 
+
 How to use: 
 ----------
 After cloning the repo, in the SnapSudoku directory, enter the following in the Terminal:
