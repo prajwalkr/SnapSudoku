@@ -4,7 +4,7 @@ import pickle
 
 from helpers import Helpers
 from cells import Cells
-
+    
 
 class Extractor(object):
     '''
@@ -16,11 +16,11 @@ class Extractor(object):
         self.helpers = Helpers()  # Image helpers
         self.image = self.loadImage(path)
         self.preprocess()
-        self.helpers.show(self.image, 'After Preprocessing')
+        #self.helpers.show(self.image, 'After Preprocessing')
         sudoku = self.cropSudoku()
         self.helpers.show(sudoku, 'After Cropping out grid')
         sudoku = self.straighten(sudoku)
-        self.helpers.show(sudoku, 'Final Sudoku grid')
+        #self.helpers.show(sudoku, 'Final Sudoku grid')
         self.cells = Cells(sudoku).cells
 
     def loadImage(self, path):

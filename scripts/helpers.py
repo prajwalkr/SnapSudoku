@@ -45,7 +45,10 @@ class Helpers(object):
         contours, h = cv2.findContours(
             image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
-        for cnt in contours:
+        for cnt in contours[:min(5,len(contours))]:
+            #im = image.copy()
+            #cv2.drawContours(im, cnt, -1, (255,255,255), 5)
+            #self.show(im,'contour')
             if len(self.approx(cnt)) == 4:
                 return cnt
         return None

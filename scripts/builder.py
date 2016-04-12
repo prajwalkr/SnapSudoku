@@ -77,3 +77,5 @@ class Builder(object):
         pickle.dump(self.usedSet, open('usedSet', 'w'))
         pickle.dump(self.trainingData, open('train', 'w'))
         pickle.dump(self.testingData, open('test', 'w'))
+
+Builder()
