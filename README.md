@@ -12,12 +12,13 @@ SnapSudoku
  - Improve `empty cell detection`. Only a basic logic is used right now. 
  - Improve accuracy by checking and removing same digits predicted in the same row/column. 
 
-Here's a Sudoku image from a smartphone:
+> Here's a Sudoku image from a smartphone:
 
 ![Input Sudoku Image](https://lh3.googleusercontent.com/-rGpsVTsqkYU/VwysnNV6U4I/AAAAAAAAG00/1XVCxhPkVzMTugwy53PUTVu76JtywthyQCLcB/s1000/test1.jpg "test1.jpg")![](blob:https%3A//drive.google.com/7556d1d6-752d-4e86-b913-8373d50ebe41) 
 
 </br>
-The current code gives out the following output to the Terminal:
+> The current code gives out the following output to the Terminal:
+
 ![Final set of predicted digits](https://lh3.googleusercontent.com/-fiDbDkl_K0c/VwytWw8EmUI/AAAAAAAAG1A/_zl5CLKBsuw1M9YnvVZsYM0goyX__5PdgCLcB/s1000/Final+Set+of+Digits.png "Final Set of Digits.png")
 Algorithm
 -------------
@@ -38,23 +39,31 @@ Algorithm
      
     
 > 7.  Predict Digits using a Neural Network. 
-![Prediction](https://lh3.googleusercontent.com/-oMYqzsvb5WM/VwzHoe7OB4I/AAAAAAAAG28/kWf8acj3NtkDrrMJP_rlIzFELxlO1JBKACLcB/s400/Digits.png "Digits.png")
 
 > The only 3rd party library required is  *OpenCV*. The Neural Network created was trained with around 250 digits. The constants used in the training phase, the training data-set is in this repository itself. 
 
 Here are some images through the process:
+-------
 
-1. After Preprocessing:
+> After Preprocessing:
+
 ![After Preprocessing](https://lh3.googleusercontent.com/-hTPN4mSDNiY/Vwy8UgTcxNI/AAAAAAAAG1c/e67gE9TSAKQrcd-ADHmAgOtuMDQPhyCrgCLcB/s500/After+Preprocessing.png "After Preprocessing.png")
 
-2. Final processed Sudoku Grid
+> Final processed Sudoku Grid
+
 ![Final processed Sudoku Grid](https://lh3.googleusercontent.com/--Fg-hdourGA/Vwy85uIDTVI/AAAAAAAAG1o/Qxk9ZTHf1JQmyzmkNrLPJmO0EQ3ea5DoQCLcB/s500/Final+Sudoku+Grid.png "Final Sudoku Grid.png")
 
-3. Here are a few digits after processing the cells:
+> Here are a few digits after processing the cells:
+
 ![Digit 3](https://lh3.googleusercontent.com/-FUS-oLg9IFg/VwzG4TkmbkI/AAAAAAAAG2Y/Itp5IgR-RQEolR83GAjf0pTZxd-1jgWGQCLcB/s100/three.png "three.png")![Digit 5](https://lh3.googleusercontent.com/-3M9WyxA40lw/VwzG-pJTKHI/AAAAAAAAG2g/Dnh0sk7MQ18rHvpUQM-bT3RvjR1T1HTyACLcB/s100/five.png "five.png")![Digit 8](https://lh3.googleusercontent.com/-oPRnuu7XXxc/VwzHKJjnpyI/AAAAAAAAG2o/11FlxwHkkygGEHgoY4NQLZroq-fH6b5MACLcB/s100/eight.png "eight.png") 
-4. Here's a typical empty cell:
+
+> Here's a typical empty cell:
+
 ![empty cell](https://lh3.googleusercontent.com/-p2bhyuRWptI/VwzHVYrtABI/AAAAAAAAG2w/C_vKYzb75sQ8gcPdf0aaHCjB6dM02du8wCLcB/s100/emptycell.png "emptycell.png")
 
+>  Predicted Grid:
+
+ ![Prediction](https://lh3.googleusercontent.com/-oMYqzsvb5WM/VwzHoe7OB4I/AAAAAAAAG28/kWf8acj3NtkDrrMJP_rlIzFELxlO1JBKACLcB/s400/Digits.png "Digits.png")
 ----------
 Contributions
 ------------------
