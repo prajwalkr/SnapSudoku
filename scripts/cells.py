@@ -12,10 +12,10 @@ class Cells(object):
     from the Extractor
     '''
 
-    def __init__(self, gridLess):
+    def __init__(self, sudoku):
         print 'Extracting cells...',
         self.helpers = Helpers()
-        self.cells = self.extractCells(gridLess)
+        self.cells = self.extractCells(sudoku)
         print 'done.'
 
     def extractCells(self, sudoku):
