@@ -25,12 +25,13 @@ Working:
 -------
 > Here's a Sudoku image from a smartphone:
 
-![Input Sudoku Image](https://lh3.googleusercontent.com/-rGpsVTsqkYU/VwysnNV6U4I/AAAAAAAAG00/1XVCxhPkVzMTugwy53PUTVu76JtywthyQCLcB/s1000/test1.jpg "test1.jpg")![](blob:https%3A//drive.google.com/7556d1d6-752d-4e86-b913-8373d50ebe41) 
-
+![Input Sudoku Image](https://lh3.googleusercontent.com/-rGpsVTsqkYU/VwysnNV6U4I/AAAAAAAAG00/1XVCxhPkVzMTugwy53PUTVu76JtywthyQCLcB/s1000/test1.jpg "Input image")![](blob:https%3A//drive.google.com/7556d1d6-752d-4e86-b913-8373d50ebe41) 
 </br>
+
 > The current code gives out the following output to the Terminal:
 
-![Final set of predicted digits](https://lh3.googleusercontent.com/-fiDbDkl_K0c/VwytWw8EmUI/AAAAAAAAG1A/_zl5CLKBsuw1M9YnvVZsYM0goyX__5PdgCLcB/s1000/Final+Set+of+Digits.png "Final Set of Digits.png")
+![enter image description here](https://lh3.googleusercontent.com/-chfMLJVfqd0/VxtNke91JPI/AAAAAAAAHzo/yFrXM0Aza_gPIkyoxcM2SunKMaaywP-LgCLcB/s500/Final+Sudoku+Grid.png "Final Sudoku Grid")
+
 Algorithm
 -------------
 
@@ -54,15 +55,15 @@ Here are some illustrations of the different stages:
 
 > After Preprocessing:
 
-![After Preprocessing](https://lh3.googleusercontent.com/-hTPN4mSDNiY/Vwy8UgTcxNI/AAAAAAAAG1c/e67gE9TSAKQrcd-ADHmAgOtuMDQPhyCrgCLcB/s500/After+Preprocessing.png "After Preprocessing.png")
+![After Preprocessing](https://lh3.googleusercontent.com/-hTPN4mSDNiY/Vwy8UgTcxNI/AAAAAAAAG1c/e67gE9TSAKQrcd-ADHmAgOtuMDQPhyCrgCLcB/s500/After+Preprocessing.png "After Preprocessing")
 
 > Final processed Sudoku Grid
 
-![Final processed Sudoku Grid](https://lh3.googleusercontent.com/--Fg-hdourGA/Vwy85uIDTVI/AAAAAAAAG1o/Qxk9ZTHf1JQmyzmkNrLPJmO0EQ3ea5DoQCLcB/s500/Final+Sudoku+Grid.png "Final Sudoku Grid.png")
+![enter image description here](https://lh3.googleusercontent.com/-AcbLo77wYH0/VxtPrbXcAYI/AAAAAAAAH0E/OmEzl2Hn9JkjQTxfdAVTn7ZeN3q3rsutgCLcB/s500/Sudoku+Grid.png "Sudoku Grid Image")
 
 > Here are a few digits after processing the cells:
 
-![Digit 3](https://lh3.googleusercontent.com/-FUS-oLg9IFg/VwzG4TkmbkI/AAAAAAAAG2Y/Itp5IgR-RQEolR83GAjf0pTZxd-1jgWGQCLcB/s100/three.png "three.png")![Digit 5](https://lh3.googleusercontent.com/-3M9WyxA40lw/VwzG-pJTKHI/AAAAAAAAG2g/Dnh0sk7MQ18rHvpUQM-bT3RvjR1T1HTyACLcB/s100/five.png "five.png")![Digit 8](https://lh3.googleusercontent.com/-oPRnuu7XXxc/VwzHKJjnpyI/AAAAAAAAG2o/11FlxwHkkygGEHgoY4NQLZroq-fH6b5MACLcB/s100/eight.png "eight.png") 
+![Digit 3](https://lh3.googleusercontent.com/-2zxwex6LYnk/VxtQEQH6fDI/AAAAAAAAH0Q/nFmrwIlm7HYV7O2qZEoICQDKF8fcoFKmQCLcB/s100/three.png "Three")![Digit 8](https://lh3.googleusercontent.com/-oPRnuu7XXxc/VwzHKJjnpyI/AAAAAAAAG2o/11FlxwHkkygGEHgoY4NQLZroq-fH6b5MACLcB/s100/eight.png "eight.png") 
 
 > Here's a typical empty cell:
 
@@ -70,7 +71,7 @@ Here are some illustrations of the different stages:
 
 >  Predicted Grid:
 
- ![Prediction](https://lh3.googleusercontent.com/-oMYqzsvb5WM/VwzHoe7OB4I/AAAAAAAAG28/kWf8acj3NtkDrrMJP_rlIzFELxlO1JBKACLcB/s400/Digits.png "Digits.png")
+![Prediction](https://lh3.googleusercontent.com/-bmiUuMHZtYw/VxtQ8SezWLI/AAAAAAAAH0s/VV8HvATwHEAfhtKJqT6nK-fh0A28E52gwCLcB/s500/Digits.png "Digits")
 ----------
 Contributions
 ------------------
