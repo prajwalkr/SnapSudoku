@@ -29,7 +29,10 @@ class Sudoku(object):
                 else:
                     self.res[i][j] = ' '
 
-        print SudokuStr(self.res)
+        s = SudokuStr(self.res)
+        print(s)
+        print('')
+        print(s.solve())
 
     def getImagePath(self, name):
         return os.path.abspath(name)
