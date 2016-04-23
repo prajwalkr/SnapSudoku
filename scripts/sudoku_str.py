@@ -47,17 +47,17 @@ class SudokuStr(object):
     
     @classmethod
     def border_line(cls):
-        return ('=' * 7).join('+' * 4)
+        return ('-' * 7).join('|' * 4)
 
     @classmethod
     def get_fmt(cls, i):
-        return '{}' if i % 3 else '+ {}'
+        return '{}' if i % 3 else '| {}'
 
     @classmethod
     def sudoku_line(cls, i, line):
         s = '' if i % 3 else cls.border_line() + '\n'
         return s + ' '.join(cls.get_fmt(i).format(x if x != '0' else '_')
-            for i, x in enumerate(line)) + ' +'
+            for i, x in enumerate(line)) + ' |'
 
     def board_rows(self):
         for i in range(9):
@@ -67,6 +67,6 @@ class SudokuStr(object):
         return '\n'.join(self.sudoku_line(i, line) for i, line
             in enumerate(self.board_rows())) + '\n' + self.border_line()
 
-if __name__ == '__main__:
+if __name__ == '__main__':
     print(repr(SudokuStr()))
     print(SudokuStr())

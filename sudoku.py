@@ -6,7 +6,7 @@ import sys
 
 from scripts.sudokuExtractor import Extractor
 from scripts.train import NeuralNetwork
-
+from scripts.sudoku_str import SudokuStr
 
 class Sudoku(object):
 
@@ -29,7 +29,7 @@ class Sudoku(object):
                 else:
                     self.res[i][j] = ' '
 
-        pprint(self.res)
+        print SudokuStr(self.res)
 
     def getImagePath(self, name):
         return os.path.abspath(name)
