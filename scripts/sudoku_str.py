@@ -78,8 +78,8 @@ class SudokuStr(object):
             out_file.write(text)
 
     def solve(self):
-        try:  # see: http://norvig.com/sudopy.shtml
-            import sudopy
+        try:
+            import sudopy  # see: http://norvig.com/sudopy.shtml
         except ImportError:         # if Norvig's code not found
             self.download_sudopy()  # then download a local copy
             import sudopy
