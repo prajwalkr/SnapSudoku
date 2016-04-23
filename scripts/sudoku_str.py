@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # SudokuStr() can take three kinds of input:
 # An 81 character str
@@ -44,7 +45,7 @@ class SudokuStr(object):
 
     def __str__(self):
         return self.sudoku_board()
-    
+
     @classmethod
     def border_line(cls):
         return ('-' * 7).join('|' * 4)
@@ -67,6 +68,28 @@ class SudokuStr(object):
         return '\n'.join(self.sudoku_line(i, line) for i, line
             in enumerate(self.board_rows())) + '\n' + self.border_line()
 
+    @classmethod  # this will only happen once...
+    def download_sudopy(cls):
+        import requests  # pip install requests
+        resp = requests.get('http://norvig.com/sudopy.shtml')
+        assert resp.status_code == 200, 'No Internet access?'
+        text = resp.text.partition('linenums">')[2].partition('</pre>')[0]
+        with open('sudopy.py', 'w') as out_file:
+            out_file.write(text)
+
+    def solve(self):
+        try:  # see: http://norvig.com/sudopy.shtml
+            import sudopy
+        except ImportError:         # if Norvig's code not found
+            self.download_sudopy()  # then download a local copy
+            import sudopy
+        solution_dict = sudopy.solve(self.s)
+        self.s = ''.join(solution_dict[s] for s in sudopy.squares)
+        return s
+
 if __name__ == '__main__':
-    print(repr(SudokuStr()))
-    print(SudokuStr())
+    s = SudokuStr()
+    print(repr(s))
+    print(s)
+    print('')
+    print(s.solve())
