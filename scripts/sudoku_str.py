@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# coding: utf-8
+
+import sudopy  # see: http://norvig.com/sudopy.shtml
 
 # SudokuStr() can take three kinds of input:
 # An 81 character str
@@ -44,7 +47,7 @@ class SudokuStr(object):
 
     def __str__(self):
         return self.sudoku_board()
-    
+
     @classmethod
     def border_line(cls):
         return ('-' * 7).join('|' * 4)
@@ -67,6 +70,15 @@ class SudokuStr(object):
         return '\n'.join(self.sudoku_line(i, line) for i, line
             in enumerate(self.board_rows())) + '\n' + self.border_line()
 
+    def solve(self):
+        # must add a test before trying to solve.  sudopy.random_puzzle() seems to have such a test.
+        solution_dict = sudopy.solve(self.s)
+        self.s = ''.join(solution_dict[s] for s in sudopy.squares)
+        return s
+
 if __name__ == '__main__':
-    print(repr(SudokuStr()))
-    print(SudokuStr())
+    s = SudokuStr()
+    print(repr(s))
+    print(s)
+    print('')
+    print(s.solve())
