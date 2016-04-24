@@ -10,7 +10,7 @@
 ##   u is a unit,   e.g. ['A1','B1','C1','D1','E1','F1','G1','H1','I1']
 ##   grid is a grid,e.g. 81 non-blank chars, e.g. starting with '.18...7...
 ##   values is a dict of possible values, e.g. {'A1':'12349', 'A2':'8', ...}
-
+import pprint
 def cross(A, B):
     "Cross product of elements in A and elements in B."
     return [a+b for a in A for b in B]
@@ -110,14 +110,15 @@ def display(values):
 
 ################ Search ################
 
-def solve(grid): return search(parse_grid(grid))
+def solve(grid): 
+    return search(parse_grid(grid))
 
 def search(values):
     "Using depth-first search and propagation, try all possible values."
     if values is False:
         return False ## Failed earlier
     if all(len(values[s]) == 1 for s in squares):
-        return values ## Solved!
+        return getResult(values) ## Solved!
     ## Chose the unfilled square s with the fewest possibilities
     n,s = min((len(values[s]), s) for s in squares if len(values[s]) > 1)
     return some(search(assign(values.copy(), s, d))
@@ -140,6 +141,9 @@ def shuffled(seq):
     seq = list(seq)
     random.shuffle(seq)
     return seq
+
+def getResult(values):
+    return [values[row + col] for row in rows for col in cols]
 
 ################ System test ################
 

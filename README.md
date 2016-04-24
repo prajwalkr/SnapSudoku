@@ -19,7 +19,11 @@ After cloning the repo, in the SnapSudoku directory, enter the following in the 
 
     python sudoku.py <path-to-input-image>
 
-Note: OpenCV for Python must be installed. 
+Note:  OpenCV, Numpy for Python must be installed. 
+To install them:
+
+    sudo apt-get install python-opencv
+    pip install numpy
 
 Working:
 -------
@@ -30,7 +34,7 @@ Working:
 
 > The current code gives out the following output to the Terminal:
 
-![enter image description here](https://lh3.googleusercontent.com/-chfMLJVfqd0/VxtNke91JPI/AAAAAAAAHzo/yFrXM0Aza_gPIkyoxcM2SunKMaaywP-LgCLcB/s500/Final+Sudoku+Grid.png "Final Sudoku Grid")
+![Final result](https://lh3.googleusercontent.com/-PLL7mtKdT68/VxzRU-D1mxI/AAAAAAAAH4s/v2lvYd_mQes3J3ta0PwQ_W2gwxhrVS_VQCLcB/s500/Final+Result.png "Final Result")
 
 Algorithm
 -------------
@@ -48,7 +52,7 @@ Algorithm
     6.2. Removing all major noise in the cell. 
 > 7.  Predict Digits using a Neural Network. 
 
-> The only 3rd party library required is  *OpenCV*. The Neural Network created was trained with around 250 digits. The constants used in the training phase, the training data-set is in this repository itself. 
+> The only 3rd party libraries required are  *OpenCV, Numpy*. The Neural Network created was trained with around 250 digits. The constants used in the training phase, the training data-set is in this repository itself. 
 
 Here are some illustrations of the different stages:
 -------
@@ -72,9 +76,16 @@ Here are some illustrations of the different stages:
 >  Predicted Grid:
 
 ![Prediction](https://lh3.googleusercontent.com/-bmiUuMHZtYw/VxtQ8SezWLI/AAAAAAAAH0s/VV8HvATwHEAfhtKJqT6nK-fh0A28E52gwCLcB/s500/Digits.png "Digits")
+
+> Solved Grid:
+
+![Solved Grid](https://lh3.googleusercontent.com/-zWnlGKCz9xs/VxzSmieN5EI/AAAAAAAAH48/DR6t33TSfhgDVe7ew3n0YRKAUJB45rKWACLcB/s500/Solved+Grid.png "Solved Grid")
 ----------
-Contributions
+Contributors
 ------------------
-I'll be very happy to get new ideas to improve the accuracy and make the application better. Feel free to give a pull request! 
+[Cclaus](https://github.com/cclauss)
+
+I'll be very happy to get new ideas to improve the accuracy and make the application better. Feel free to give a pull request! :smile:
+
 
 

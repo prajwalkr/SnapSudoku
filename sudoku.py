@@ -7,6 +7,7 @@ import sys
 from scripts.sudokuExtractor import Extractor
 from scripts.train import NeuralNetwork
 from scripts.sudoku_str import SudokuStr
+from scripts import sudopy
 
 class Sudoku(object):
 
@@ -31,9 +32,9 @@ class Sudoku(object):
 
         s = SudokuStr(self.res)
         print(s)
-        print('')
         if sudopy.parse_grid(str(s)):
-            print(s.solve())
+            print "\nSolving...\n"
+            print(SudokuStr(s.solve()))
         else:
             print('No solution found.  Please rescan the puzzle.')
 

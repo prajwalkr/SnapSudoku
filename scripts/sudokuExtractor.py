@@ -18,7 +18,7 @@ class Extractor(object):
         self.preprocess()
         #self.helpers.show(self.image, 'After Preprocessing')
         sudoku = self.cropSudoku()
-        self.helpers.show(sudoku, 'After Cropping out grid')
+        #self.helpers.show(sudoku, 'After Cropping out grid')
         sudoku = self.straighten(sudoku)
         #self.helpers.show(sudoku, 'Final Sudoku grid')
         self.cells = Cells(sudoku).cells

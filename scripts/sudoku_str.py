@@ -72,9 +72,10 @@ class SudokuStr(object):
 
     def solve(self):
         # must add a test before trying to solve.  sudopy.random_puzzle() seems to have such a test.
-        solution_dict = sudopy.solve(self.s)
-        self.s = ''.join(solution_dict[s] for s in sudopy.squares)
-        return s
+        solution = sudopy.solve(self.s)
+        #print solution
+        self.s = ''.join(solution)
+        return self.s
 
 if __name__ == '__main__':
     s = SudokuStr()
