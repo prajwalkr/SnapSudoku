@@ -32,7 +32,10 @@ class Sudoku(object):
         s = SudokuStr(self.res)
         print(s)
         print('')
-        print(s.solve())
+        if sudopy.parse_grid(str(s)):
+            print(s.solve())
+        else:
+            print('No solution found.  Please rescan the puzzle.')
 
     def getImagePath(self, name):
         return os.path.abspath(name)
