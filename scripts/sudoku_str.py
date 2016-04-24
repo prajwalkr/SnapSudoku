@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import sudopy  # see: http://norvig.com/sudopy.shtml
+
 # SudokuStr() can take three kinds of input:
 # An 81 character str
 s = '......2.38.52.......31..4....2..1....586.231.3..9..6....4..85.......39.89.1......'
@@ -68,21 +70,8 @@ class SudokuStr(object):
         return '\n'.join(self.sudoku_line(i, line) for i, line
             in enumerate(self.board_rows())) + '\n' + self.border_line()
 
-    @classmethod  # this will only happen once...
-    def download_sudopy(cls):
-        import requests  # pip install requests
-        resp = requests.get('http://norvig.com/sudopy.shtml')
-        assert resp.status_code == 200, 'No Internet access?'
-        text = resp.text.partition('linenums">')[2].partition('</pre>')[0]
-        with open('sudopy.py', 'w') as out_file:
-            out_file.write(text)
-
     def solve(self):
-        try:
-            import sudopy  # see: http://norvig.com/sudopy.shtml
-        except ImportError:         # if Norvig's code not found
-            self.download_sudopy()  # then download a local copy
-            import sudopy
+        # must add a test before trying to solve.  sudopy.random_puzzle() seems to have such a test.
         solution_dict = sudopy.solve(self.s)
         self.s = ''.join(solution_dict[s] for s in sudopy.squares)
         return s
