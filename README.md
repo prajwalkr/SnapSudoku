@@ -7,11 +7,8 @@ SnapSudoku
 ----------
  TODO:
 ---------
- - Add `code to solve` the Sudoku from the predicted output grid.
- - Add proper exception handling, only a basic working model created.
  - Improve algorithm to get better Sudoku Grid extraction, make it `more robust against blurs` .
  - Improve `empty cell detection`. Only a basic logic is used right now. 
- - Improve accuracy by checking and removing same digits predicted in the same row/column. 
 
 How to use: 
 ----------
