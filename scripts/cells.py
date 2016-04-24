@@ -47,13 +47,10 @@ class Cells(object):
         cell = self.helpers.make_it_square(cell[y:y + h, x:x + w], 28)
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
         cell = cv2.morphologyEx(cell, cv2.MORPH_CLOSE, kernel)
-        cell = 255 * (cell / 130)
-        return cell
+        return 255 * (cell / 130)
 
     def centerDigit(self, digit):
-        digit = self.centerX(digit)
-        digit = self.centerY(digit)
-        return digit
+        return self.centerY(self.centerX(digit))
 
     def centerX(self, digit):
         topLine = self.helpers.getTopLine(digit)
