@@ -1,8 +1,16 @@
-import pickle
 import os
+import pickle
 import numpy as np
 
 from sudokuExtractor import Extractor
+
+def load(filename):
+    with open(filename) as in_file:
+        return pickle.load(in_file)
+
+def dump(data, filename):
+    with open(filename, 'w') as out_file:
+        pickle.dump(data, out_file)
 
 
 class Builder(object):
@@ -11,24 +19,15 @@ class Builder(object):
     '''
 
     def __init__(self, imgDir=None, rebuild=False):
-        if imgDir is None:
-            ROOT = os.path.dirname(os.getcwd())
-            self.imgDir = os.path.join(ROOT, 'train/')
-        else:
-            self.imgDir = os.path.abspath(imgDir)
-
-        self.usedSet = dict()
+        self.imgDir = (os.path.abspath(imgDir) if imgDir else
+            os.path.join(os.path.dirname(os.getcwd()), 'train/'))
+        self.usedSet = {}
         if rebuild == False:
             usedSetPath = os.path.join(os.getcwd(), 'usedSet')
             if os.path.exists(usedSetPath):
-                self.usedSet = pickle.load(open(usedSetPath, 'r'))
-
-        if len(self.usedSet) == 0:
-            self.trainingData = []
-            self.testingData = []
-        else:
-            self.trainingData = pickle.load(open('train', 'r'))
-            self.testingData = pickle.load(open('test', 'r'))
+                self.usedSet = load(usedSetPath)
+        self.trainingData = load('train') if self.usedSet else []
+        self.testingData = load('test') if self.usedSet else []
 
         try:
             for imagePath, results, file in self.getUnusedImages():
@@ -74,8 +73,8 @@ class Builder(object):
         return e
 
     def saveData(self):
-        pickle.dump(self.usedSet, open('usedSet', 'w'))
-        pickle.dump(self.trainingData, open('train', 'w'))
-        pickle.dump(self.testingData, open('test', 'w'))
+        dump(self.usedSet, 'usedSet')
+        dump(self.trainingData, 'train')
+        dump(self.testingData, 'test')
 
 Builder()
