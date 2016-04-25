@@ -1,6 +1,6 @@
+from __future__ import print_function  # prepare for Python 3
 import numpy as np
 import cv2
-import pickle
 
 from helpers import Helpers
 from digit import Digit
@@ -13,10 +13,10 @@ class Cells(object):
     '''
 
     def __init__(self, sudoku):
-        print 'Extracting cells...',
+        print('Extracting cells...', end='')
         self.helpers = Helpers()
         self.cells = self.extractCells(sudoku)
-        print 'done.'
+        print('done.')
 
     def extractCells(self, sudoku):
         cells = []
@@ -47,32 +47,27 @@ class Cells(object):
         cell = self.helpers.make_it_square(cell[y:y + h, x:x + w], 28)
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
         cell = cv2.morphologyEx(cell, cv2.MORPH_CLOSE, kernel)
-        cell = 255 * (cell / 130)
-        return cell
+        return 255 * (cell / 130)
 
     def centerDigit(self, digit):
-        digit = self.centerX(digit)
-        digit = self.centerY(digit)
-        return digit
+        return self.centerY(self.centerX(digit))
 
     def centerX(self, digit):
         topLine = self.helpers.getTopLine(digit)
         bottomLine = self.helpers.getBottomLine(digit)
-        if topLine is None or bottomLine is None:
+        if None in (topLine, bottomLine):
             return digit
         centerLine = (topLine + bottomLine) >> 1
         imageCenter = digit.shape[0] >> 1
-        digit = self.helpers.rowShift(
+        return self.helpers.rowShift(
             digit, start=topLine, end=bottomLine, length=imageCenter - centerLine)
-        return digit
 
     def centerY(self, digit):
         leftLine = self.helpers.getLeftLine(digit)
         rightLine = self.helpers.getRightLine(digit)
-        if leftLine is None or rightLine is None:
+        if None in (leftLine, rightLine):
             return digit
         centerLine = (leftLine + rightLine) >> 1
         imageCenter = digit.shape[1] >> 1
-        digit = self.helpers.colShift(
+        return self.helpers.colShift(
             digit, start=leftLine, end=rightLine, length=imageCenter - centerLine)
-        return digit
