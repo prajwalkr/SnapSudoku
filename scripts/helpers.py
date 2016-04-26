@@ -1,13 +1,16 @@
+# -*- coding: utf-8 -*-
+
 import cv2
 import numpy as np
 
 
 class Helpers(object):
-    '''
+    """
     Image manipulation helper functions
-    '''
+    """
 
-    def show(self, img, windowName='Image'):
+    @staticmethod
+    def show(img, windowName='Image'):
         screen_res = 1280.0, 720.0
         scale_width = screen_res[0] / img.shape[1]
         scale_height = screen_res[1] / img.shape[0]
@@ -22,7 +25,8 @@ class Helpers(object):
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def thresholdify(self, img):
+    @staticmethod
+    def thresholdify(img):
         img = cv2.adaptiveThreshold(img.astype(np.uint8), 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                     cv2.THRESH_BINARY, 11, 3)
         return 255 - img
@@ -32,11 +36,13 @@ class Helpers(object):
         self.show(edges)
         return edges
 
-    def dilate(self, image, kernel):
+    @staticmethod
+    def dilate(image, kernel):
         cv2.dilate(image, kernel)
         return image
 
-    def largestContour(self, image):
+    @staticmethod
+    def largestContour(image):
         contours, h = cv2.findContours(
             image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return max(contours, key=cv2.contourArea)
@@ -45,18 +51,20 @@ class Helpers(object):
         contours, h = cv2.findContours(
             image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
-        for cnt in contours[:min(5,len(contours))]:
-            #im = image.copy()
-            #cv2.drawContours(im, cnt, -1, (255,255,255), 5)
-            #self.show(im,'contour')
+        for cnt in contours[:min(5, len(contours))]:
+            # im = image.copy()
+            # cv2.drawContours(im, cnt, -1, (255,255,255), 5)
+            # self.show(im,'contour')
             if len(self.approx(cnt)) == 4:
                 return cnt
         return None
 
-    def make_it_square(self, image, side_length=306):
+    @staticmethod
+    def make_it_square(image, side_length=306):
         return cv2.resize(image, (side_length, side_length))
 
-    def area(self, image):
+    @staticmethod
+    def area(image):
         return float(image.shape[0] * image.shape[1])
 
     def cut_out_sudoku_puzzle(self, image, contour):
@@ -64,18 +72,21 @@ class Helpers(object):
         image = image[y:y + h, x:x + w]
         return self.make_it_square(image, min(image.shape))
 
-    def binarized(self, image):
+    @staticmethod
+    def binarized(image):
         for i in xrange(image.shape[0]):
             for j in xrange(image.shape[1]):
                 image[i][j] = 255 * int(image[i][j] != 255)
         return image
 
-    def approx(self, cnt):
+    @staticmethod
+    def approx(cnt):
         peri = cv2.arcLength(cnt, True)
         app = cv2.approxPolyDP(cnt, 0.01 * peri, True)
         return app
 
-    def get_rectangle_corners(self, cnt):
+    @staticmethod
+    def get_rectangle_corners(cnt):
         pts = cnt.reshape(4, 2)
         rect = np.zeros((4, 2), dtype="float32")
 
@@ -121,31 +132,36 @@ class Helpers(object):
         warp = cv2.warpPerspective(grid, M, (maxWidth, maxHeight))
         return self.make_it_square(warp)
 
-    def getTopLine(self, image):
+    @staticmethod
+    def getTopLine(image):
         for i, row in enumerate(image):
             if np.any(row):
                 return i
         return None
 
-    def getBottomLine(self, image):
+    @staticmethod
+    def getBottomLine(image):
         for i in xrange(image.shape[0] - 1, -1, -1):
             if np.any(image[i]):
                 return i
         return None
 
-    def getLeftLine(self, image):
+    @staticmethod
+    def getLeftLine(image):
         for i in xrange(image.shape[1]):
             if np.any(image[:, i]):
                 return i
         return None
 
-    def getRightLine(self, image):
+    @staticmethod
+    def getRightLine(image):
         for i in xrange(image.shape[1] - 1, -1, -1):
             if np.any(image[:, i]):
                 return i
         return None
 
-    def rowShift(self, image, start, end, length):
+    @staticmethod
+    def rowShift(image, start, end, length):
         shifted = np.zeros(image.shape)
         if start + length < 0:
             length = -start
@@ -156,7 +172,8 @@ class Helpers(object):
             shifted[row + length] = image[row]
         return shifted
 
-    def colShift(self, image, start, end, length):
+    @staticmethod
+    def colShift(image, start, end, length):
         shifted = np.zeros(image.shape)
         if start + length < 0:
             length = -start
