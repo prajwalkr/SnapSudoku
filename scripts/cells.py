@@ -1,6 +1,4 @@
-import numpy as np
 import cv2
-import pickle
 
 from helpers import Helpers
 from digit import Digit
