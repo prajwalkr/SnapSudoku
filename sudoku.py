@@ -33,8 +33,7 @@ class Sudoku(object):
         s = SudokuStr(self.res)
         print(s)
         if sudopy.parse_grid(str(s)):
-            print "\nSolving...\n"
-            print(SudokuStr(s.solve()))
+            print('\nSolving...\n\n{}'.format(s.solve()))
         else:
             print('No solution found.  Please rescan the puzzle.')
 
