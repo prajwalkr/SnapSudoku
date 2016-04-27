@@ -108,17 +108,37 @@ def display(values):
         if r in 'CF': print line
     print
 
-################ Search ################
+################ Search & Solve ################
 
-def solve(grid):
-    return search(parse_grid(grid))
+def time_solve(grid, timelimit):
+    start = time.clock()
+    values = search(parse_grid(grid))
+    t = time.clock()-start
+    ## Display puzzle that take long enough
+    if timelimit is not 0 and t > timelimit:
+        print "Puzzle takes unusual amount of time to be solved"
+    return solved(parse_grid(getResult(values)))
+
+def solve(grid, timelimit = 0):
+    """Attempts to solve a grid. When timelimit is number of seconds, display
+    puzzles that take longer. When timelimit is 0, don't display any puzzles."""
+    result = time_solve(grid, timelimit)
+    return result
+
+def solved(values):
+    "A puzzle is solved if each unit is a permutation of the digits 1 to 9."
+    def unitsolved(unit):
+        return set(values[s] for s in unit) == set(digits)
+    if values is not False and all(unitsolved(unit) for unit in unitlist):
+        return getResult(values)
+    return False
 
 def search(values):
     "Using depth-first search and propagation, try all possible values."
     if values is False:
         return False ## Failed earlier
     if all(len(values[s]) == 1 for s in squares):
-        return getResult(values) ## Solved!
+        return values ## Solved!
     ## Chose the unfilled square s with the fewest possibilities
     n,s = min((len(values[s]), s) for s in squares if len(values[s]) > 1)
     return some(search(assign(values.copy(), s, d))
@@ -132,10 +152,6 @@ def some(seq):
         if e: return e
     return False
 
-def from_file(filename, sep='\n'):
-    "Parse a file into a list of strings, separated by sep."
-    return file(filename).read().strip().split(sep)
-
 def shuffled(seq):
     "Return a randomly shuffled copy of the input sequence."
     seq = list(seq)
@@ -148,32 +164,6 @@ def getResult(values):
 ################ System test ################
 
 import time, random
-
-def solve_all(grids, name='', showif=0.0):
-    """Attempt to solve a sequence of grids. Report results.
-    When showif is a number of seconds, display puzzles that take longer.
-    When showif is None, don't display any puzzles."""
-    def time_solve(grid):
-        start = time.clock()
-        values = solve(grid)
-        t = time.clock()-start
-        ## Display puzzles that take long enough
-        if showif is not None and t > showif:
-            display(grid_values(grid))
-            if values: display(values)
-            print '(%.2f seconds)\n' % t
-        return (t, solved(parse_grid(values)))
-    times, results = zip(*[time_solve(grid) for grid in grids])
-    N = len(grids)
-    if N > 1:
-        print "Solved %d of %d %s puzzles (avg %.2f secs (%d Hz), max %.2f secs)." % (
-            sum(results), N, name, sum(times)/N, N/sum(times), max(times))
-
-def solved(values):
-    "A puzzle is solved if each unit is a permutation of the digits 1 to 9."
-    def unitsolved(unit):
-        return set(values[s] for s in unit) == set(digits)
-    return values is not False and all(unitsolved(unit) for unit in unitlist)
 
 def random_puzzle(N=17):
     """Make a random puzzle with N or more assignments. Restart on contradictions.
@@ -194,7 +184,7 @@ hard1  = '.....6....59.....82....8....45........3........6..3.54...325..6.......
 
 if __name__ == '__main__':
     test()
-    solve_all([random_puzzle() for _ in range(99)], "random", 100.0)
+    solve(hard1,1)
 
 ## References used:
 ## http://norvig.com/sudoku.html
