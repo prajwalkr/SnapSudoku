@@ -1,13 +1,11 @@
 import os
 import pickle as pck
 import numpy as np
-from pprint import pprint
 import sys
 
 from scripts.sudokuExtractor import Extractor
 from scripts.train import NeuralNetwork
 from scripts.sudoku_str import SudokuStr
-from scripts import sudopy
 
 class Sudoku(object):
 
@@ -32,10 +30,9 @@ class Sudoku(object):
 
         s = SudokuStr(self.res)
         print(s)
-        if sudopy.parse_grid(str(s)):
-            print "\nSolving...\n"
-            print(SudokuStr(s.solve()))
-        else:
+        try:
+            print('\nSolving...\n\n{}'.format(s.solve()))
+        except ValueError:
             print('No solution found.  Please rescan the puzzle.')
 
     def getImagePath(self, name):
