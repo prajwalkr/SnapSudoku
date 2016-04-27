@@ -110,7 +110,7 @@ def display(values):
 
 ################ Search ################
 
-def solve(grid): 
+def solve(grid):
     return search(parse_grid(grid))
 
 def search(values):
@@ -162,7 +162,7 @@ def solve_all(grids, name='', showif=0.0):
             display(grid_values(grid))
             if values: display(values)
             print '(%.2f seconds)\n' % t
-        return (t, solved(values))
+        return (t, solved(parse_grid(values)))
     times, results = zip(*[time_solve(grid) for grid in grids])
     N = len(grids)
     if N > 1:
@@ -171,7 +171,8 @@ def solve_all(grids, name='', showif=0.0):
 
 def solved(values):
     "A puzzle is solved if each unit is a permutation of the digits 1 to 9."
-    def unitsolved(unit): return set(values[s] for s in unit) == set(digits)
+    def unitsolved(unit):
+        return set(values[s] for s in unit) == set(digits)
     return values is not False and all(unitsolved(unit) for unit in unitlist)
 
 def random_puzzle(N=17):
@@ -190,16 +191,10 @@ def random_puzzle(N=17):
 grid1  = '003020600900305001001806400008102900700000008006708200002609500800203009005010300'
 grid2  = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
 hard1  = '.....6....59.....82....8....45........3........6..3.54...325..6..................'
-    
+
 if __name__ == '__main__':
     test()
-    solve_all(from_file("easy50.txt", '========'), "easy", None)
-    solve_all(from_file("top95.txt"), "hard", None)
-    solve_all(from_file("hardest.txt"), "hardest", None)
     solve_all([random_puzzle() for _ in range(99)], "random", 100.0)
 
 ## References used:
-## http://www.scanraid.com/BasicStrategies.htm
-## http://www.sudokudragon.com/sudokustrategy.htm
-## http://www.krazydad.com/blog/2005/09/29/an-index-of-sudoku-strategies/
-## http://www2.warwick.ac.uk/fac/sci/moac/currentstudents/peter_cock/python/sudoku/
+## http://norvig.com/sudoku.html
