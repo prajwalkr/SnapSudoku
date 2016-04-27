@@ -3,44 +3,55 @@
 
 import sudopy  # see: http://norvig.com/sudopy.shtml
 
-# SudokuStr() can take three kinds of input:
+"""
+SudokuStr(sudoku) can take three kinds of input:
+* An 81 character str
+* Or a multiline str
+* Or a list or tuple
+"""
+
 # An 81 character str
-s = '......2.38.52.......31..4....2..1....586.231.3..9..6....4..85.......39.89.1......'
+s0 = '......2.38.52.......31..4....2..1....586.231.3..9..6....4..85.......39.89.1......'
 
 # Or a multiline str
-s = '''......2.3
-       8.52.....
-       ..31..4..
-       ..2..1...
-       .586.231.
-       3..9..6..
-       ..4..85..
-       .....39.8
-       9.1......'''
+s1 = '''......2.3
+        8.52.....
+        ..31..4..
+        ..2..1...
+        .586.231.
+        3..9..6..
+        ..4..85..
+        .....39.8
+        9.1......'''
 
 # Or a list or tuple
-s = [[' ', ' ', ' ', ' ', ' ', ' ', '2', ' ', '3'],
-     ['8', ' ', '5', '2', ' ', ' ', ' ', ' ', ' '],
-     [' ', ' ', '3', '1', ' ', ' ', '4', ' ', ' '],
-     [' ', ' ', '2', ' ', ' ', '1', ' ', ' ', ' '],
-     [' ', '5', '8', '6', ' ', '2', '3', '1', ' '],
-     ['3', ' ', ' ', '9', ' ', ' ', '6', ' ', ' '],
-     [' ', ' ', '4', ' ', ' ', '8', '5', ' ', ' '],
-     [' ', ' ', ' ', ' ', ' ', '3', '9', ' ', '8'],
-     ['9', ' ', '1', ' ', ' ', ' ', ' ', ' ', ' ']]
+s2 = [[' ', ' ', ' ', ' ', ' ', ' ', '2', ' ', '3'],
+      ['8', ' ', '5', '2', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', '3', '1', ' ', ' ', '4', ' ', ' '],
+      [' ', ' ', '2', ' ', ' ', '1', ' ', ' ', ' '],
+      [' ', '5', '8', '6', ' ', '2', '3', '1', ' '],
+      ['3', ' ', ' ', '9', ' ', ' ', '6', ' ', ' '],
+      [' ', ' ', '4', ' ', ' ', '8', '5', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', '3', '9', ' ', '8'],
+      ['9', ' ', '1', ' ', ' ', ' ', ' ', ' ', ' ']]
 
 
 class SudokuStr(object):
-    def __init__(self, s=s):
-        if isinstance(s, str):
-            self.s = ''.join(line.lstrip() for line in s.splitlines())
-        elif isinstance(s, (list, tuple)):
-            if len(s) == 9:
-                self.s = ''.join(''.join(row for row in col) for col in s)
-            elif len(s) == 81:
-                self.s = ''.join(s)
-        assert len(self.s) == 9 * 9, 'A SudokuStr must be 81 characters long'
-        self.s = self.s.replace(' ', '.').replace('0', '.').replace('_', '.')
+    def __init__(self, sudoku=s0):
+        self.s = self.sudoku_to_str(sudoku)
+
+    @staticmethod
+    def sudoku_to_str(sudoku):
+        s = ''
+        if isinstance(sudoku, str):
+            s = ''.join(line.lstrip() for line in sudoku.splitlines())
+        elif isinstance(sudoku, (list, tuple)):
+            if len(sudoku) == 9:
+                s = ''.join(''.join(row for row in col) for col in sudoku)
+            elif len(sudoku) == 81:
+                s = ''.join(sudoku)
+        assert len(s) == 9 * 9, 'A SudokuStr must be 81 characters long'
+        return s.replace(' ', '.').replace('0', '.').replace('_', '.')
 
     def __repr__(self):
         return "{}('{}')".format(self.__class__.__name__, self.s)
@@ -48,12 +59,12 @@ class SudokuStr(object):
     def __str__(self):
         return self.sudoku_board()
 
-    @classmethod
-    def border_line(cls):
+    @staticmethod
+    def border_line():
         return ('-' * 7).join('|' * 4)
 
-    @classmethod
-    def get_fmt(cls, i):
+    @staticmethod
+    def get_fmt(i):
         return '{}' if i % 3 else '| {}'
 
     @classmethod
@@ -71,15 +82,19 @@ class SudokuStr(object):
             in enumerate(self.board_rows())) + '\n' + self.border_line()
 
     def solve(self):
-        # must add a test before trying to solve.  sudopy.random_puzzle() seems to have such a test.
-        solution = sudopy.solve(self.s)
-        #print solution
-        self.s = ''.join(solution)
-        return self.s
+        if not sudopy.parse_grid(self.s):
+            raise ValueError('Sudoku puzzle is not solvable.\n> ' + self.s)
+        self.s = ''.join(sudopy.solve(self.s))
+        return self  # enables: print(s.solve())
 
 if __name__ == '__main__':
     s = SudokuStr()
+    assert s.s == SudokuStr(s1).s, 'Multiline str failure'
+    assert s.s == SudokuStr(s2).s, 'List failure'
+    assert s.s == SudokuStr(tuple(s2)).s, 'Tuple failure'
     print(repr(s))
     print(s)
-    print('')
-    print(s.solve())
+    try:
+        print('\nSolving...\n\n{}'.format(s.solve()))
+    except ValueError:
+        print('No solution found.  Please rescan the puzzle.')
