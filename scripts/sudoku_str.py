@@ -89,9 +89,9 @@ class SudokuStr(object):
 
 if __name__ == '__main__':
     s = SudokuStr()
-    #assert s.s == SudokuStr(s1).s, 'Multiline str failure'
-    #assert s.s == SudokuStr(s2).s, 'List failure'
-    #assert s.s == SudokuStr(tuple(s2)).s, 'Tuple failure'
+    assert s.s == SudokuStr(s1).s, 'Multiline str failure'
+    assert s.s == SudokuStr(s2).s, 'List failure'
+    assert s.s == SudokuStr(tuple(s2)).s, 'Tuple failure'
     print(repr(s))
     print(s)
     try:
