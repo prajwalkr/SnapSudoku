@@ -82,17 +82,19 @@ class SudokuStr(object):
             in enumerate(self.board_rows())) + '\n' + self.border_line()
 
     def solve(self):
+        if not sudopy.parse_grid(self.s):
+            raise ValueError('Sudoku puzzle is not solvable.\n> ' + self.s)
         self.s = ''.join(sudopy.solve(self.s))
         return self  # enables: print(s.solve())
 
 if __name__ == '__main__':
     s = SudokuStr()
-    assert s.s == SudokuStr(s1).s, 'Multiline str failure'
-    assert s.s == SudokuStr(s2).s, 'List failure'
-    assert s.s == SudokuStr(tuple(s2)).s, 'Tuple failure'
+    #assert s.s == SudokuStr(s1).s, 'Multiline str failure'
+    #assert s.s == SudokuStr(s2).s, 'List failure'
+    #assert s.s == SudokuStr(tuple(s2)).s, 'Tuple failure'
     print(repr(s))
     print(s)
-    if sudopy.parse_grid(str(s)):
+    try:
         print('\nSolving...\n\n{}'.format(s.solve()))
-    else:
+    except ValueError:
         print('No solution found.  Please rescan the puzzle.')
