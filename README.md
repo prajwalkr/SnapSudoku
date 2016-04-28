@@ -80,7 +80,8 @@ Here are some illustrations of the different stages:
 ----------
 Contributors
 ------------------
-[cclauss](https://github.com/cclauss)
+[cclauss](https://github.com/cclauss) <br/>
+[lakshmanaram] (https://github.com/lakshmanaram)
 
 I'll be very happy to get new ideas to improve the accuracy and make the application better. Feel free to give a pull request! :smile:
 
