@@ -38,7 +38,7 @@ def snap_sudoku(image_name):
 
 if __name__ == '__main__':
     try:
-        snap_sudoku(sys.argv[1])
+        snap_sudoku(image_name=sys.argv[1])
     except IndexError:
         fmt = 'usage: {} image_name'
         print(fmt.format(__file__.split('/')[-1]))
