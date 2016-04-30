@@ -10,17 +10,26 @@ SnapSudoku
  - Improve algorithm to get better Sudoku Grid extraction, make it `more robust against blurs` .
  - Improve `empty cell detection`. Only a basic logic is used right now. 
 
+Prerequisites:
+-------------
+
+- Python
+    - Download from [here](https://www.python.org/downloads/)
+
+- OpenCV  (<= 2.4.9)
+    - Install OpenCV from [here](http://opencv.org/downloads.html) (preferred)
+    - `sudo apt-get install python-opencv`
+
+- Numpy (1.11.0)
+    - `pip install numpy` (preferred)
+    - You can build it from source [here](https://github.com/numpy/numpy)
+
 How to use: 
 ----------
-After cloning the repo, in the SnapSudoku directory, enter the following in the Terminal:
-
+    git clone https://github.com/prajwalkr/SnapSudoku.git
+    cd SnapSudoku
     python sudoku.py <path-to-input-image>
 
-Note:  OpenCV, Numpy for Python must be installed. 
-To install them:
-
-    sudo apt-get install python-opencv
-    pip install numpy
 
 Working:
 -------
@@ -81,7 +90,7 @@ Here are some illustrations of the different stages:
 Contributors
 ------------------
 [cclauss](https://github.com/cclauss) <br/>
-[lakshmanaram] (https://github.com/lakshmanaram)
+[lakshmanaram](https://github.com/lakshmanaram)
 
 I'll be very happy to get new ideas to improve the accuracy and make the application better. Feel free to give a pull request! :smile:
 
