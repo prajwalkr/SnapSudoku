@@ -16,9 +16,9 @@ Prerequisites:
 - Python
     - Download from [here](https://www.python.org/downloads/)
 
-- OpenCV  (<= 2.4.9)
-    - Install OpenCV from [here](http://opencv.org/downloads.html) (preferred)
-    - `sudo apt-get install python-opencv`
+- OpenCV
+    - `sudo apt-get install python-opencv` (preferred)
+    - Install OpenCV from [here](http://opencv.org/downloads.html) 
 
 - Numpy (1.11.0)
     - `pip install numpy` (preferred)

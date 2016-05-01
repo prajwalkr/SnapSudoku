@@ -22,6 +22,9 @@ class Helpers(object):
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
+    def isCv2(self):
+        return cv2.__version__.startswith('2.')
+        
     def thresholdify(self, img):
         img = cv2.adaptiveThreshold(img.astype(np.uint8), 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                     cv2.THRESH_BINARY, 11, 3)
@@ -37,8 +40,12 @@ class Helpers(object):
         return image
 
     def largestContour(self, image):
-        contours, h = cv2.findContours(
-            image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        if self.isCv2():
+            contours, h = cv2.findContours(
+                image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        else:
+            _, contours, h = cv2.findContours(
+                image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return max(contours, key=cv2.contourArea)
 
     def largest4SideContour(self, image):
