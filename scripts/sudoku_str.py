@@ -12,6 +12,8 @@ SudokuStr(sudoku) can take three kinds of input:
 
 # An 81 character str
 s0 = '......2.38.52.......31..4....2..1....586.231.3..9..6....4..85.......39.89.1......'
+s0 = '      2 38 52       31  4    2  1    586 231 3  9  6    4  85       39 89 1      '
+
 
 # Or a multiline str
 s1 = '''......2.3
@@ -44,7 +46,10 @@ class SudokuStr(object):
     def sudoku_to_str(sudoku):
         s = ''
         if isinstance(sudoku, str):
-            s = sudoku
+            if '\n' in sudoku:  # a multiline string
+                s = ''.join(line.lstrip() for line in sudoku.splitlines())
+            else:
+                s = sudoku
         elif isinstance(sudoku, (list, tuple)):
             if len(sudoku) == 9:
                 s = ''.join(''.join(row for row in col) for col in sudoku)
