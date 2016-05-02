@@ -48,7 +48,7 @@ class SudokuStr(object):
         if isinstance(sudoku, str):
             if '\n' in sudoku:  # a multiline string
                 s = ''.join(line.lstrip() for line in sudoku.splitlines())
-            else:
+            else:               # a single line string
                 s = sudoku
         elif isinstance(sudoku, (list, tuple)):
             if len(sudoku) == 9:
