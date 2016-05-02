@@ -44,7 +44,7 @@ class SudokuStr(object):
     def sudoku_to_str(sudoku):
         s = ''
         if isinstance(sudoku, str):
-            s = ''.join(line.lstrip() for line in sudoku.splitlines())
+            s = sudoku
         elif isinstance(sudoku, (list, tuple)):
             if len(sudoku) == 9:
                 s = ''.join(''.join(row for row in col) for col in sudoku)

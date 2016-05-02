@@ -1,41 +1,45 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 import os
-import pickle as pck
-import numpy as np
+import pickle
 import sys
+
+import numpy as np
 
 from scripts.sudokuExtractor import Extractor
 from scripts.train import NeuralNetwork
 from scripts.sudoku_str import SudokuStr
 
-class Sudoku(object):
 
-    def __init__(self, name):
-        image_path = self.getImagePath(name)
-        cells = Extractor(image_path).cells
-        neuralnetpath = os.getcwd() + '/networks/net'
-        sizes, biases, wts = pck.load(open(neuralnetpath, 'r'))
-        net = NeuralNetwork(customValues=(sizes, biases, wts))
-        self.res = [[None for _ in range(9)] for _ in range(9)]
-        
-        for i, row in enumerate(cells):
-            for j, cell in enumerate(row):
-                vector = np.reshape(cell, (784, 1))
-                x = net.feedforward(vector)
-                x[0] = 0
-                s = sum(x)
-                if list(x[np.argmax(x)])[0] / s > 0.8:
-                    self.res[i][j] = str(np.argmax(x))
-                else:
-                    self.res[i][j] = ' '
+def create_net(rel_path):
+    with open(os.getcwd() + rel_path) as in_file:
+        sizes, biases, wts = pickle.load(in_file)
+    return NeuralNetwork(customValues=(sizes, biases, wts))
 
-        s = SudokuStr(self.res)
-        print(s)
-        try:
-            print('\nSolving...\n\n{}'.format(s.solve()))
-        except ValueError:
-            print('No solution found.  Please rescan the puzzle.')
 
-    def getImagePath(self, name):
-        return os.path.abspath(name)
+def get_cells(image_path):  # yields 9 * 9 = 81 cells
+    net = create_net(rel_path='/networks/net')
+    for row in Extractor(os.path.abspath(image_path)).cells:
+        for cell in row:
+            x = net.feedforward(np.reshape(cell, (784, 1)))
+            x[0] = 0
+            digit = np.argmax(x)
+            yield str(digit) if list(x[digit])[0] / sum(x) > 0.8 else ' '
 
-Sudoku(sys.argv[1])
+
+def snap_sudoku(image_path):
+    grid = ''.join(cell for cell in get_cells(image_path))
+    s = SudokuStr(grid)
+    try:
+        print('\nSolving...\n\n{}'.format(s.solve()))
+    except ValueError:
+        print('No solution found.  Please rescan the puzzle.')
+
+
+if __name__ == '__main__':
+    try:
+        snap_sudoku(image_path=sys.argv[1])
+    except IndexError:
+        fmt = 'usage: {} image_path'
+        print(fmt.format(__file__.split('/')[-1]))
