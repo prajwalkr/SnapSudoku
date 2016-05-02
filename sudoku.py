@@ -25,7 +25,7 @@ def get_cells(image_path):  # yields 9 * 9 = 81 cells
             x = net.feedforward(np.reshape(cell, (784, 1)))
             x[0] = 0
             digit = np.argmax(x)
-            yield str(digit) if list(x[digit])[0] / sum(x) > 0.8 else ' '
+            yield str(digit) if list(x[digit])[0] / sum(x) > 0.8 else '.'
 
 
 def snap_sudoku(image_path):
