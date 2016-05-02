@@ -7,13 +7,13 @@ SnapSudoku
 ----------
  TODO:
 ---------
- - Improve algorithm to get better Sudoku Grid extraction, make it `more robust against blurs` .
- - Improve `empty cell detection`. Only a basic logic is used right now. 
+ - [ ] Improve algorithm to get better Sudoku Grid extraction, make it `more robust against blurs` .
+ - [ ] Improve `empty cell detection`. Only a basic logic is used right now. 
 
 Prerequisites:
 -------------
 
-- Python
+- Python 2.7 but __not__ Python 3
     - Download from [here](https://www.python.org/downloads/)
 
 - OpenCV
