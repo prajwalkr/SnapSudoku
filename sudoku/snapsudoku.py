@@ -38,11 +38,16 @@ def load_image(image_path):
     return color_img
 
 
+def jsonify_res(str):
+    return str
+
+
 def snap_sudoku(color_img):
     grid = ''.join(cell for cell in get_cells(color_img))
     s = SudokuStr(grid)
     try:
         print('\nSolving...\n\n{}'.format(s.solve()))
+        return (jsonify_res(s.solve().s))
     except ValueError:
         print('No solution found.  Please rescan the puzzle.')
 

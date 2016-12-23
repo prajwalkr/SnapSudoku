@@ -23,7 +23,6 @@ def solve(request):
     if serializer.is_valid():
         im = Image.open(request.data['image'].file)
         color_img = np.asarray(im)
-        snap_sudoku(color_img)
-        return HttpResponse("{}")
+        return HttpResponse(snap_sudoku(color_img))
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
