@@ -1,0 +1,6 @@
+*.pyc
+/train/v1_test.tar.bz2
+/train/v1_training.tar.bz2
+mnist.pkl.gz
+save
+scripts/validator.py
