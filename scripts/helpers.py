@@ -24,7 +24,7 @@ class Helpers(object):
 
     def isCv2(self):
         return cv2.__version__.startswith('2.')
-        
+
     def thresholdify(self, img):
         img = cv2.adaptiveThreshold(img.astype(np.uint8), 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                     cv2.THRESH_BINARY, 11, 3)
@@ -44,7 +44,7 @@ class Helpers(object):
             contours, h = cv2.findContours(
                 image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         else:
-            _, contours, h = cv2.findContours(
+            contours, h = cv2.findContours(
                 image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return max(contours, key=cv2.contourArea)
 
@@ -52,10 +52,10 @@ class Helpers(object):
         contours, h = cv2.findContours(
             image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
-        for cnt in contours[:min(5,len(contours))]:
+        for cnt in contours[:min(5, len(contours))]:
             #im = image.copy()
             #cv2.drawContours(im, cnt, -1, (255,255,255), 5)
-            #self.show(im,'contour')
+            # self.show(im,'contour')
             if len(self.approx(cnt)) == 4:
                 return cnt
         return None
