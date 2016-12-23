@@ -21,7 +21,7 @@ def create_net(rel_path):
 
 
 def get_cells(color_img):
-    net = create_net(rel_path='\\networks\\net')
+    net = create_net(rel_path='\sudoku\\networks\\net')
     for row in Extractor(color_img).cells:
         for cell in row:
             x = net.feedforward(np.reshape(cell, (784, 1)))
