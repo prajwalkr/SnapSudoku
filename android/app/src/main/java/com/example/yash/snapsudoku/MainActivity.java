@@ -1,20 +1,19 @@
 package com.example.yash.snapsudoku;
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.AnyRes;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.yash.snapsudoku.network.SudokuService;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -28,72 +27,80 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int REQUEST_CODE = 101;
+
+    private ImageView ivPhoto;
+    private Bitmap imageBitmap = null;
+
+    private SudokuService service;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8000/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
+        service = retrofit.create(SudokuService.class);
 
-        final SudokuService service = retrofit.create(SudokuService.class);
-//        service.getIndex()
-//                .enqueue(new Callback<String>() {
-//                    @Override
-//                    public void onResponse(Call<String> call, Response<String> response) {
-//                        Toast.makeText(MainActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<String> call, Throwable t) {
-//                        Toast.makeText(MainActivity.this, t.getMessage().toString(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//        Uri fileUri = getUriToDrawable(this, R.drawable.test2);
-
-        Drawable drawable = getResources().getDrawable(R.drawable.test2);
-
-        Uri fileUri = Uri.parse("android.resource://" + this.getPackageName() + "/drawable/test2.jpg");
-        File file = new File("drawable://" + R.drawable.test2);
-
-        Log.d("LOG_TAG", file.getPath());
-
-        if (file.exists()) {
-            RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
-            MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
-
-            service.solveSudoku(image)
-                    .enqueue(new Callback<String>() {
-                        @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            Toast.makeText(MainActivity.this, "Right", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(Call<String> call, Throwable t) {
-                            Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "File does not exist", Toast.LENGTH_SHORT).show();
-        }
-
+        Intent intentTakePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intentTakePhoto, REQUEST_CODE);
     }
 
-    /*
-    * get uri to drawable or any other resource type if u wish
-    * @param context - context
-    * @param drawableId - drawable res id
-    * @return - uri
-    */
-    public static final Uri getUriToDrawable(@NonNull Context context, @AnyRes int drawableId) {
-        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                "://" + context.getResources().getResourcePackageName(drawableId)
-                + '/' + context.getResources().getResourceTypeName(drawableId)
-                + '/' + context.getResources().getResourceEntryName(drawableId));
-        return imageUri;
+    @Override
+    protected void onActivityResult(int requestCode, final int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            imageBitmap = (Bitmap) data.getExtras().get("data");
+
+            ivPhoto.setImageBitmap(imageBitmap);
+            saveTempBitmap();
+
+            File f = getCachedBitmap();
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
+            MultipartBody.Part image = MultipartBody.Part.createFormData("image", f.getName(), requestBody);
+
+            solveSudoku(image);
+        }
+    }
+
+    private void solveSudoku(MultipartBody.Part image) {
+        service.solveSudoku(image)
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Toast.makeText(MainActivity.this, response.body(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast.makeText(MainActivity.this, "Wrong", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    @NonNull
+    private File getCachedBitmap() {
+        File cacheDir = getBaseContext().getCacheDir();
+        return new File(cacheDir, getString(R.string.image_file_name));
+    }
+
+    private void saveTempBitmap() {
+        File cacheDir = getBaseContext().getCacheDir();
+        File f = new File(cacheDir, getString(R.string.image_file_name));
+
+        try {
+            FileOutputStream out = new FileOutputStream(f);
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
