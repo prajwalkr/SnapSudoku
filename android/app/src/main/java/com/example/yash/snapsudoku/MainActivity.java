@@ -2,9 +2,10 @@ package com.example.yash.snapsudoku;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -12,9 +13,6 @@ import android.widget.Toast;
 import com.example.yash.snapsudoku.network.SudokuService;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -33,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap imageBitmap = null;
 
     private SudokuService service;
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +46,19 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         service = retrofit.create(SudokuService.class);
 
+        path = Environment.getExternalStorageDirectory() + "/image.jpg";
+
         Intent intentTakePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intentTakePhoto.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(path)));
         startActivityForResult(intentTakePhoto, REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, final int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            imageBitmap = (Bitmap) data.getExtras().get("data");
 
-            ivPhoto.setImageBitmap(imageBitmap);
-            saveTempBitmap();
-
-            File f = getCachedBitmap();
+            File f = new File(path);
+            Toast.makeText(this, Boolean.toString(f.exists()), Toast.LENGTH_SHORT).show();
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
             MultipartBody.Part image = MultipartBody.Part.createFormData("image", f.getName(), requestBody);
 
@@ -77,30 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(MainActivity.this, "Wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    @NonNull
-    private File getCachedBitmap() {
-        File cacheDir = getBaseContext().getCacheDir();
-        return new File(cacheDir, getString(R.string.image_file_name));
-    }
-
-    private void saveTempBitmap() {
-        File cacheDir = getBaseContext().getCacheDir();
-        File f = new File(cacheDir, getString(R.string.image_file_name));
-
-        try {
-            FileOutputStream out = new FileOutputStream(f);
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-            out.flush();
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
