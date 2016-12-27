@@ -4,7 +4,7 @@ import pickle
 
 from helpers import Helpers
 from cells import Cells
-    
+
 
 class Extractor(object):
     '''
@@ -24,25 +24,25 @@ class Extractor(object):
         self.cells = Cells(sudoku).cells
 
     def preprocess(self):
-        print ('Preprocessing...',)
+        print 'Preprocessing...',
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         self.image = self.helpers.thresholdify(self.image)
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
         self.image = cv2.morphologyEx(self.image, cv2.MORPH_CLOSE, kernel)
-        print ('done.')
+        print 'done.'
 
     def cropSudoku(self):
-        print ('Cropping out Sudoku...',)
+        print 'Cropping out Sudoku...',
         contour = self.helpers.largestContour(self.image.copy())
         sudoku = self.helpers.cut_out_sudoku_puzzle(self.image.copy(), contour)
-        print ('done.')
+        print 'done.'
         return sudoku
 
     def straighten(self, sudoku):
-        print ('Straightening image...',)
+        print 'Straightening image...',
         largest = self.helpers.largest4SideContour(sudoku.copy())
         app = self.helpers.approx(largest)
         corners = self.helpers.get_rectangle_corners(app)
         sudoku = self.helpers.warp_perspective(corners, sudoku)
-        print ('done.')
+        print 'done.'
         return sudoku

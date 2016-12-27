@@ -41,6 +41,7 @@ s2 = [[' ', ' ', ' ', ' ', ' ', ' ', '2', ' ', '3'],
 class SudokuStr(object):
     def __init__(self, sudoku=s0):
         self.s = self.sudoku_to_str(sudoku)
+        print (self)
 
     @staticmethod
     def sudoku_to_str(sudoku):

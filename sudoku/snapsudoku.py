@@ -82,7 +82,7 @@ def snap_sudoku(color_img):
     except ValueError as e:
         return jsonifyResponse(success=False,
                                solution=None,
-                               error="No solution could be found for the scanned picture.")
+                               error="No solution could be found for the scanned picture. Try rescanning?")
 
 if __name__ == '__main__':
     try:
