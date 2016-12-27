@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
 from rest_framework import status
@@ -21,8 +21,9 @@ def index(request):
 def solve(request):
     serializer = SudokuImageSerializer(data=request.data)
     if serializer.is_valid():
+        serializer.save()
         im = Image.open(request.data['image'].file)
         color_img = np.asarray(im)
-        return HttpResponse(snap_sudoku(color_img))
+        return JsonResponse(snap_sudoku(color_img))
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

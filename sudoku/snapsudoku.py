@@ -38,8 +38,29 @@ def load_image(image_path):
     return color_img
 
 
-def jsonify_res(str):
+def getError(error):
+    return {
+        "message": error
+    }
+
+
+def jsonifyResponse(success, solution, error):
+    return {
+        "success": success,
+        "data": {
+            "solution": solution
+        },
+        "error": getError(error) if error else error
+    }
     return str
+
+
+def convert2arr(str):
+    arr = list(str)
+    res = []
+    for i in range(9):
+        res.append(arr[9 * i: 9 * i + 9])
+    return res
 
 
 def snap_sudoku(color_img):
@@ -47,9 +68,10 @@ def snap_sudoku(color_img):
     s = SudokuStr(grid)
     try:
         print('\nSolving...\n\n{}'.format(s.solve()))
-        return (jsonify_res(s.solve().s))
+        arr = convert2arr(s.solve().s)
+        return jsonifyResponse(success=True, solution=arr, error=None)
     except ValueError:
-        print('No solution found.  Please rescan the puzzle.')
+        return jsonifyResponse(success=False, solution=None, error="No solution found. Please rescan the puzzle.")
 
 if __name__ == '__main__':
     try:
