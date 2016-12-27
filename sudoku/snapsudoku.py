@@ -64,14 +64,25 @@ def convert2arr(str):
 
 
 def snap_sudoku(color_img):
-    grid = ''.join(cell for cell in get_cells(color_img))
+    try:
+        grid = ''.join(cell for cell in get_cells(color_img))
+    except:
+        return jsonifyResponse(success=False,
+                               solution=None,
+                               error="Could not generate a sudoku grid. Please rescan an appropriate picture.")
+
     s = SudokuStr(grid)
     try:
-        print('\nSolving...\n\n{}'.format(s.solve()))
-        arr = convert2arr(s.solve().s)
-        return jsonifyResponse(success=True, solution=arr, error=None)
-    except ValueError:
-        return jsonifyResponse(success=False, solution=None, error="No solution found. Please rescan the puzzle.")
+        s.solve()
+        print('\nSolving...\n\n{}'.format(s))
+        arr = convert2arr(s.s)
+        return jsonifyResponse(success=True,
+                               solution=arr,
+                               error=None)
+    except ValueError as e:
+        return jsonifyResponse(success=False,
+                               solution=None,
+                               error="No solution could be found for the scanned picture.")
 
 if __name__ == '__main__':
     try:
