@@ -1,5 +1,7 @@
 package com.example.yash.snapsudoku.network;
 
+import com.example.yash.snapsudoku.model.SudokuSolution;
+
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,5 +20,5 @@ public interface SudokuService {
 
     @Multipart
     @POST(" sudoku/solve/")
-    Call<String> solveSudoku(@Part MultipartBody.Part image);
+    Call<SudokuSolution> solveSudoku(@Part MultipartBody.Part image);
 }
