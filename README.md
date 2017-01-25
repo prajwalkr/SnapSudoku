@@ -1,6 +1,6 @@
 # SnapSudoku
 
-Take a picture of an unsolved Sudoku and have SnapSudoku solve it for you!
+Take a picture of an unsolved Sudoku and have SnapSudoku solve it for you! This repository also consists of an Android application which harnesses an API endpoint created using [Django REST Framework](http://www.django-rest-framework.org/).
 
 ## How to use
 
@@ -10,6 +10,8 @@ $ cd SnapSudoku
 $ pip install -r requirements.txt
 $ python sudoku/snapsudoku.py <path>
 ```
+
+You can read the directions to test the Android application [**here**](https://github.com/ymittal/SnapSudoku/blob/master/android/README.md).
 
 ### Algorithm
 
@@ -31,10 +33,14 @@ The Neural Network created was trained with around 250 digits. The [constants](h
 ### Working
 
 Here's a Sudoku image from a smartphone:
+
 ![](https://lh3.googleusercontent.com/-rGpsVTsqkYU/VwysnNV6U4I/AAAAAAAAG00/1XVCxhPkVzMTugwy53PUTVu76JtywthyQCLcB/s1000/test1.jpg "Input image")
+
 The current code produces the following output:
+
 ![](https://lh3.googleusercontent.com/-PLL7mtKdT68/VxzRU-D1mxI/AAAAAAAAH4s/v2lvYd_mQes3J3ta0PwQ_W2gwxhrVS_VQCLcB/s500/Final+Result.png "Final Result")
-**Note:** For a detailed step-by-step demo, check out [this](https://github.com/ymittal/SnapSudoku/blob/master/demo/README.md).
+
+**Note:** For a detailed step-by-step demo, check out [**this**](https://github.com/ymittal/SnapSudoku/blob/master/demo/README.md).
 
 ## TODO
 
