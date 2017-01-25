@@ -34,11 +34,11 @@ The Neural Network created was trained with around 250 digits. The [constants](h
 
 Here's a Sudoku image from a smartphone:
 
-![](https://lh3.googleusercontent.com/-rGpsVTsqkYU/VwysnNV6U4I/AAAAAAAAG00/1XVCxhPkVzMTugwy53PUTVu76JtywthyQCLcB/s1000/test1.jpg "Input image")
+<img src="https://lh3.googleusercontent.com/-rGpsVTsqkYU/VwysnNV6U4I/AAAAAAAAG00/1XVCxhPkVzMTugwy53PUTVu76JtywthyQCLcB/s1000/test1.jpg" alt="Input Image" width="320px">
 
 The current code produces the following output:
 
-![](https://lh3.googleusercontent.com/-PLL7mtKdT68/VxzRU-D1mxI/AAAAAAAAH4s/v2lvYd_mQes3J3ta0PwQ_W2gwxhrVS_VQCLcB/s500/Final+Result.png "Final Result")
+<img src="https://lh3.googleusercontent.com/-PLL7mtKdT68/VxzRU-D1mxI/AAAAAAAAH4s/v2lvYd_mQes3J3ta0PwQ_W2gwxhrVS_VQCLcB/s500/Final+Result.png" alt="Final Result" width="320px">
 
 **Note:** For a detailed step-by-step demo, check out [**this**](https://github.com/ymittal/SnapSudoku/blob/master/demo/README.md).
 
