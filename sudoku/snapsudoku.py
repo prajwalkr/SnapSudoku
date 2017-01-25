@@ -66,7 +66,8 @@ def convert2arr(str):
 def snap_sudoku(color_img):
     try:
         grid = ''.join(cell for cell in get_cells(color_img))
-    except:
+    except Exception as e:
+        print e
         return jsonifyResponse(success=False,
                                solution=None,
                                error="Could not generate a sudoku grid. Please rescan an appropriate picture.")
@@ -80,6 +81,7 @@ def snap_sudoku(color_img):
                                solution=arr,
                                error=None)
     except ValueError as e:
+        print e
         return jsonifyResponse(success=False,
                                solution=None,
                                error="No solution could be found for the scanned picture. Try rescanning?")
