@@ -32,7 +32,7 @@ How to use:
 
 Use with Docker:
 ---------------
-On a machine with a current version of Docker running, do `source docker_launch.sh` to build and run SnapSudoku inside a Docker container.
+On a machine with a current version of Docker running, do `source docker_launch.sh` to build and run SnapSudoku inside of a Docker container.
 
 Working:
 -------
