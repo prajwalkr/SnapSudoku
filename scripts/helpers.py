@@ -1,6 +1,11 @@
 import cv2
 import numpy as np
 
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
+
 
 class Helpers(object):
     '''
@@ -23,10 +28,12 @@ class Helpers(object):
         cv2.destroyAllWindows()
 
     def isCv2(self):
+        print(cv2.__version__)
         return cv2.__version__.startswith('2.')
-        
+
     def thresholdify(self, img):
-        img = cv2.adaptiveThreshold(img.astype(np.uint8), 255, cv2.ADAPTIVE_THRESH_MEAN_C,
+        img = cv2.adaptiveThreshold(img.astype(np.uint8), 255,
+                                    cv2.ADAPTIVE_THRESH_MEAN_C,
                                     cv2.THRESH_BINARY, 11, 3)
         return 255 - img
 
@@ -39,23 +46,24 @@ class Helpers(object):
         cv2.dilate(image, kernel)
         return image
 
+    def getContours(self, image):
+        """In OpenCV v2.x cv2.findContours returns contours, hierarchy.
+           In OpenCV v3.x cv2.findContours returns image, contours, hierarchy.
+           In both v2.x & v3.x contours is in postion [-2] of return values."""
+        return cv2.findContours(image, cv2.RETR_TREE,
+                                cv2.CHAIN_APPROX_SIMPLE)[-2]  # second last
+
     def largestContour(self, image):
-        if self.isCv2():
-            contours, h = cv2.findContours(
-                image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        else:
-            _, contours, h = cv2.findContours(
-                image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours = self.getContours(image)
         return max(contours, key=cv2.contourArea)
 
     def largest4SideContour(self, image):
-        contours, h = cv2.findContours(
-            image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours = self.getContours(image)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
-        for cnt in contours[:min(5,len(contours))]:
-            #im = image.copy()
-            #cv2.drawContours(im, cnt, -1, (255,255,255), 5)
-            #self.show(im,'contour')
+        for cnt in contours[:min(5, len(contours))]:
+            # im = image.copy()
+            # cv2.drawContours(im, cnt, -1, (255,255,255), 5)
+            # self.show(im,'contour')
             if len(self.approx(cnt)) == 4:
                 return cnt
         return None
