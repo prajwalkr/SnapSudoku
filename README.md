@@ -21,12 +21,12 @@ You can read the directions to test the Android application [**here**](https://g
     - Get the largest contour of the image
     - Get the largest bounding rectangle within the contour
     - Compute the grid corners
-- Do a **warp perspective** on the Sudoku
-- Extract cells by slicing the grid evenly
-- Isolate cells as follows
+ - Do a **warp perspective** on the Sudoku
+ - Extract cells by slicing the grid evenly
+ - Isolate cells as follows
     - Extract the largest connected component, giving more priority to the center pixels
     - Remove all major noise in a cell
-- Predict digits using a Neural Network
+ - Predict digits using a Neural Network
 
 The Neural Network created was trained with around 250 digits. The [constants](https://github.com/ymittal/SnapSudoku/blob/master/sudoku/networks/net) used in the training phase and the [training dataset](https://github.com/ymittal/SnapSudoku/tree/master/sudoku/train) can be found in the repository itself.
 
