@@ -10,7 +10,7 @@ from serializers import SudokuImageSerializer
 from PIL import Image
 import numpy as np
 
-from codebase.snapsudoku import snap_sudoku
+from snapsudoku.sudoku import snap_sudoku
 
 def index(request):
     return HttpResponse("Hello, world!")
@@ -19,6 +19,7 @@ def index(request):
 @api_view(['POST'])
 def solve(request):
     serializer = SudokuImageSerializer(data=request.data)
+    print ("Here")
     if serializer.is_valid():
         serializer.save()
         im = Image.open(request.data['image'].file)
