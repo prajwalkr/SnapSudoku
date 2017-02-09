@@ -15,4 +15,4 @@ An Android application to solve an unsolved sudoku by taking its picture
 
 ## Authors
 
-Please feel free to reach out to [Yash Mittal](yashmittal2009@gmail.com) if you have questions regarding the Android codebase.
+Please feel free to reach out to [Yash Mittal](yashmittal2009@gmail.com) if you have any questions regarding the Android codebase.

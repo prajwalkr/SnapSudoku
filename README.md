@@ -8,7 +8,7 @@ Take a picture of an unsolved Sudoku and have SnapSudoku solve it for you! This 
 $ git clone https://github.com/ymittal/SnapSudoku.git
 $ cd SnapSudoku
 $ pip install -r requirements.txt
-$ python sudoku/snapsudoku.py <path>
+$ python snapsudoku/sudoku.py <path>
 ```
 
 You can read the directions to test the Android application [**here**](https://github.com/ymittal/SnapSudoku/blob/master/android/README.md).
@@ -28,7 +28,7 @@ You can read the directions to test the Android application [**here**](https://g
     - Remove all major noise in a cell
  - Predict digits using a Neural Network
 
-The Neural Network created was trained with around 250 digits. The [constants](https://github.com/ymittal/SnapSudoku/blob/master/sudoku/networks/net) used in the training phase and the [training dataset](https://github.com/ymittal/SnapSudoku/tree/master/sudoku/train) can be found in the repository itself.
+The Neural Network created was trained with around 250 digits. The [constants](https://github.com/ymittal/SnapSudoku/blob/master/snapsudoku/networks/net) used in the training phase and the [training dataset](https://github.com/ymittal/SnapSudoku/tree/master/snapsudoku/train) can be found in the repository itself.
 
 ### Working
 
@@ -40,7 +40,7 @@ The current code produces the following output:
 
 <img src="https://lh3.googleusercontent.com/-PLL7mtKdT68/VxzRU-D1mxI/AAAAAAAAH4s/v2lvYd_mQes3J3ta0PwQ_W2gwxhrVS_VQCLcB/s500/Final+Result.png" alt="Final Result" width="320px">
 
-**Note:** For a detailed step-by-step demo, check out [**this**](https://github.com/ymittal/SnapSudoku/blob/master/demo/README.md).
+**Note:** For a detailed step-by-step demo, check out [**this**](https://github.com/ymittal/SnapSudoku/blob/master/snapsudoku/demo/README.md).
 
 ## TODO
 
