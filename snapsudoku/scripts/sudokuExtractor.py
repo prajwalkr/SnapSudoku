@@ -4,7 +4,7 @@ import pickle
 
 from helpers import Helpers
 from cells import Cells
-    
+
 
 class Extractor(object):
     '''
@@ -12,9 +12,9 @@ class Extractor(object):
         all the way to the cells
     '''
 
-    def __init__(self, path):
+    def __init__(self, color_img):
         self.helpers = Helpers()  # Image helpers
-        self.image = self.loadImage(path)
+        self.image = color_img
         self.preprocess()
         #self.helpers.show(self.image, 'After Preprocessing')
         sudoku = self.cropSudoku()
@@ -22,13 +22,6 @@ class Extractor(object):
         sudoku = self.straighten(sudoku)
         #self.helpers.show(sudoku, 'Final Sudoku grid')
         self.cells = Cells(sudoku).cells
-
-    def loadImage(self, path):
-        color_img = cv2.imread(path)
-        if color_img is None:
-            raise IOError('Image not loaded')
-        print 'Image loaded.'
-        return color_img
 
     def preprocess(self):
         print 'Preprocessing...',

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SnapSudoku</string>
+    <string name="image_file_name">image.jpg</string>
+</resources>
