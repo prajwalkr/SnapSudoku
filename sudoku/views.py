@@ -10,8 +10,7 @@ from serializers import SudokuImageSerializer
 from PIL import Image
 import numpy as np
 
-from snapsudoku import snap_sudoku
-
+from codebase.snapsudoku import snap_sudoku
 
 def index(request):
     return HttpResponse("Hello, world!")
