@@ -49,8 +49,10 @@ class Helpers(object):
         return max(contours, key=cv2.contourArea)
 
     def largest4SideContour(self, image):
-        contours, h = cv2.findContours(
-            image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        if cv2.__version__.startswith("2"):
+            contours, h = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        else:
+            image, contours, h = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
         for cnt in contours[:min(5,len(contours))]:
             #im = image.copy()

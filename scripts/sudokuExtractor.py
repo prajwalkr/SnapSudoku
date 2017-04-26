@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 import pickle
-
 from helpers import Helpers
 from cells import Cells
     
@@ -24,7 +23,7 @@ class Extractor(object):
         self.cells = Cells(sudoku).cells
 
     def loadImage(self, path):
-        color_img = cv2.imread(path)
+        color_img = cv2.imread(path,0)
         if color_img is None:
             raise IOError('Image not loaded')
         print 'Image loaded.'
@@ -32,7 +31,6 @@ class Extractor(object):
 
     def preprocess(self):
         print 'Preprocessing...',
-        self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         self.image = self.helpers.thresholdify(self.image)
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
         self.image = cv2.morphologyEx(self.image, cv2.MORPH_CLOSE, kernel)
