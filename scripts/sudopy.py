@@ -41,7 +41,7 @@ def test():
     assert peers['C2'] == set(['A2', 'B2', 'D2', 'E2', 'F2', 'G2', 'H2', 'I2',
                                'C1', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9',
                                'A1', 'A3', 'B1', 'B3'])
-    print 'All tests pass.'
+    print('All tests pass.')
 
 ################ Parse a Grid ################
 
@@ -50,7 +50,7 @@ def parse_grid(grid):
     return False if a contradiction is detected."""
     ## To start, every square can be any digit; then assign values from the grid.
     values = dict((s, digits) for s in squares)
-    for s,d in grid_values(grid).items():
+    for s,d in list(grid_values(grid).items()):
         if d in digits and not assign(values, s, d):
             return False ## (Fail if we can't assign d to square s.)
     return values
@@ -59,7 +59,7 @@ def grid_values(grid):
     "Convert grid into a dict of {square: char} with '0' or '.' for empties."
     chars = [c for c in grid if c in digits or c in '0.']
     assert len(chars) == 81
-    return dict(zip(squares, chars))
+    return dict(list(zip(squares, chars)))
 
 ################ Constraint Propagation ################
 
@@ -103,10 +103,10 @@ def display(values):
     width = 1+max(len(values[s]) for s in squares)
     line = '+'.join(['-'*(width*3)]*3)
     for r in rows:
-        print ''.join(values[r+c].center(width)+('|' if c in '36' else '')
-                      for c in cols)
-        if r in 'CF': print line
-    print
+        print(''.join(values[r+c].center(width)+('|' if c in '36' else '')
+                      for c in cols))
+        if r in 'CF': print(line)
+    print()
 
 ################ Search & Solve ################
 
@@ -116,7 +116,7 @@ def time_solve(grid, timelimit):
     t = time.clock()-start
     ## Display puzzle that take long enough
     if timelimit is not 0 and t > timelimit:
-        print "Puzzle takes unusual amount of time to be solved"
+        print("Puzzle takes unusual amount of time to be solved")
     return solved(parse_grid(getResult(values)))
 
 def solve(grid, timelimit = 0):

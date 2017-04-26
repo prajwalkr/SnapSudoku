@@ -2,8 +2,8 @@ import numpy as np
 import cv2
 import pickle
 
-from helpers import Helpers
-from digit import Digit
+from .helpers import Helpers
+from .digit import Digit
 
 
 class Cells(object):
@@ -13,15 +13,15 @@ class Cells(object):
     '''
 
     def __init__(self, sudoku):
-        print 'Extracting cells...',
+        print('Extracting cells...', end=' ')
         self.helpers = Helpers()
         self.cells = self.extractCells(sudoku)
-        print 'done.'
+        print('done.')
 
     def extractCells(self, sudoku):
         cells = []
         W, H = sudoku.shape
-        cell_size = W / 9
+        cell_size = W // 9
         i, j = 0, 0
         for r in range(0, W, cell_size):
             row = []
@@ -47,7 +47,7 @@ class Cells(object):
         cell = self.helpers.make_it_square(cell[y:y + h, x:x + w], 28)
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
         cell = cv2.morphologyEx(cell, cv2.MORPH_CLOSE, kernel)
-        cell = 255 * (cell / 130)
+        cell = 255 * (cell // 130)
         return cell
 
     def centerDigit(self, digit):

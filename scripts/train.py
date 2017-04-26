@@ -64,11 +64,11 @@ class NeuralNetwork(object):
                 does `epochs` number of iterations on the training data with 
                 learning rate `eta`.
         '''
-        for iteration in xrange(epochs):
+        for iteration in range(epochs):
             if iteration % (epochs // 4) == 0:
                 percent = str(100 * float(iteration) / epochs)
                 correctness = str(self.evaluate(test))
-                print "At {}% correctness is: {}".format(percent, correctness)
+                print("At {}% correctness is: {}".format(percent, correctness))
             shuffle(training_data)
             mini_batches = [training_data[i:i + MBsize]
                             for i in range(0, len(training_data), MBsize)]
@@ -120,7 +120,7 @@ class NeuralNetwork(object):
         nabla_w[-1] = np.dot(delta, activations[-2].transpose())
         # Here, l = 1 means the last layer of neurons, l = 2 is the
         # second-last layer, and so on.
-        for l in xrange(2, self.layers):
+        for l in range(2, self.layers):
             z = zs[-l]
             sp = sigmoid_prime(z)
             delta = np.dot(self.wts[-l + 1].transpose(), delta) * sp
