@@ -2,7 +2,7 @@ import os
 import pickle
 import numpy as np
 
-from sudokuExtractor import Extractor
+from .sudokuExtractor import Extractor
 
 def load(filename):
     with open(filename) as in_file:
@@ -36,8 +36,8 @@ class Builder(object):
                     [np.reshape(cell, (784, 1)) for cell in row] for row in cells]
                 trainingResults = [[self.vectorizedResult(
                     int(digit)) for digit in row] for row in results]
-                for i in xrange(9):
-                    for j in xrange(9):
+                for i in range(9):
+                    for j in range(9):
                         if trainingResults[i][j] == None:
                             continue
                         self.trainingData.append(

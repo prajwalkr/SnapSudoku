@@ -1,6 +1,6 @@
 import pickle
 
-from train import NeuralNetwork
+from .train import NeuralNetwork
 
 with open('train', 'r') as in_file:
     training = pickle.load(in_file)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import sudopy  # see: http://norvig.com/sudopy.shtml
+from . import sudopy  # see: http://norvig.com/sudopy.shtml
 
 """
 SudokuStr(sudoku) can take three kinds of input:
@@ -97,9 +97,9 @@ if __name__ == '__main__':
     assert s.s == SudokuStr(s1).s, 'Multiline str failure'
     assert s.s == SudokuStr(s2).s, 'List failure'
     assert s.s == SudokuStr(tuple(s2)).s, 'Tuple failure'
-    print(repr(s))
+    print((repr(s)))
     print(s)
     try:
-        print('\nSolving...\n\n{}'.format(s.solve()))
+        print(('\nSolving...\n\n{}'.format(s.solve())))
     except ValueError:
         print('No solution found.  Please rescan the puzzle.')

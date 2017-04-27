@@ -49,8 +49,12 @@ class Helpers(object):
         return max(contours, key=cv2.contourArea)
 
     def largest4SideContour(self, image):
-        contours, h = cv2.findContours(
-            image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        if self.isCv2():
+            contours, h = cv2.findContours(
+                image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        else:
+            _, contours, h = cv2.findContours(
+                image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
         for cnt in contours[:min(5,len(contours))]:
             #im = image.copy()
@@ -72,8 +76,8 @@ class Helpers(object):
         return self.make_it_square(image, min(image.shape))
 
     def binarized(self, image):
-        for i in xrange(image.shape[0]):
-            for j in xrange(image.shape[1]):
+        for i in range(image.shape[0]):
+            for j in range(image.shape[1]):
                 image[i][j] = 255 * int(image[i][j] != 255)
         return image
 
@@ -135,19 +139,19 @@ class Helpers(object):
         return None
 
     def getBottomLine(self, image):
-        for i in xrange(image.shape[0] - 1, -1, -1):
+        for i in range(image.shape[0] - 1, -1, -1):
             if np.any(image[i]):
                 return i
         return None
 
     def getLeftLine(self, image):
-        for i in xrange(image.shape[1]):
+        for i in range(image.shape[1]):
             if np.any(image[:, i]):
                 return i
         return None
 
     def getRightLine(self, image):
-        for i in xrange(image.shape[1] - 1, -1, -1):
+        for i in range(image.shape[1] - 1, -1, -1):
             if np.any(image[:, i]):
                 return i
         return None
@@ -159,7 +163,7 @@ class Helpers(object):
         elif end + length >= image.shape[0]:
             length = image.shape[0] - 1 - end
 
-        for row in xrange(start, end + 1):
+        for row in range(start, end + 1):
             shifted[row + length] = image[row]
         return shifted
 
@@ -170,6 +174,6 @@ class Helpers(object):
         elif end + length >= image.shape[1]:
             length = image.shape[1] - 1 - end
 
-        for col in xrange(start, end + 1):
+        for col in range(start, end + 1):
             shifted[:, col + length] = image[:, col]
         return shifted

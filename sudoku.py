@@ -13,8 +13,8 @@ from scripts.sudoku_str import SudokuStr
 
 
 def create_net(rel_path):
-    with open(os.getcwd() + rel_path) as in_file:
-        sizes, biases, wts = pickle.load(in_file)
+    with open(os.getcwd() + rel_path,'rb') as in_file:
+        sizes, biases, wts = pickle.load(in_file,encoding='latin1')
     return NeuralNetwork(customValues=(sizes, biases, wts))
 
 
@@ -32,7 +32,7 @@ def snap_sudoku(image_path):
     grid = ''.join(cell for cell in get_cells(image_path))
     s = SudokuStr(grid)
     try:
-        print('\nSolving...\n\n{}'.format(s.solve()))
+        print(('\nSolving...\n\n{}'.format(s.solve())))
     except ValueError:
         print('No solution found.  Please rescan the puzzle.')
 
@@ -42,4 +42,4 @@ if __name__ == '__main__':
         snap_sudoku(image_path=sys.argv[1])
     except IndexError:
         fmt = 'usage: {} image_path'
-        print(fmt.format(__file__.split('/')[-1]))
+        print((fmt.format(__file__.split('/')[-1])))
