@@ -11,6 +11,10 @@ from scripts.sudokuExtractor import Extractor
 from scripts.train import NeuralNetwork
 from scripts.sudoku_str import SudokuStr
 
+from flask import Flask, request, render_template
+
+app = Flask(__name__)
+
 
 def create_net(rel_path):
     with open(os.getcwd() + rel_path) as in_file:
@@ -32,14 +36,26 @@ def snap_sudoku(image_path):
     grid = ''.join(cell for cell in get_cells(image_path))
     s = SudokuStr(grid)
     try:
-        print('\nSolving...\n\n{}'.format(s.solve()))
+        print('Solving...')
+        return s.solve()
     except ValueError:
-        print('No solution found.  Please rescan the puzzle.')
+        return 'No solution found. Please rescan the puzzle and try again.'
+
+
+@app.route('/', methods=['GET', 'POST'])
+def solve():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return render_template('index.html', result='No file')
+        input_file = request.files['file']
+        if input_file.filename == '':
+            return render_template('index.html', result='No file selected. Please try again.')
+        input_file.save(os.path.join(app.root_path, 'static/images/input.jpg'))
+        print('helpme')
+        solution = snap_sudoku('static/images/input.jpg')
+        return render_template('index.html', result=solution)
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
-    try:
-        snap_sudoku(image_path=sys.argv[1])
-    except IndexError:
-        fmt = 'usage: {} image_path'
-        print(fmt.format(__file__.split('/')[-1]))
+    app.run(host='0.0.0.0')

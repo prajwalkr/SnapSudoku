@@ -44,7 +44,7 @@ class Helpers(object):
             contours, h = cv2.findContours(
                 image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         else:
-            _, contours, h = cv2.findContours(
+            contours, h = cv2.findContours(
                 image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return max(contours, key=cv2.contourArea)
 
