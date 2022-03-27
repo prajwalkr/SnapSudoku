@@ -1,0 +1,41 @@
+body {
+    background-image: url('../images/background.jpg');
+    background-size : cover;
+    background-attachment: fixed;
+}
+
+h1 {
+    font-size: 36px;
+    font-family: 'Courier New';
+}
+
+h2 {
+    font-size: 28px;
+    font-family: 'Courier New';
+}
+
+p {
+    font-size: 14px;
+    font-family: 'Courier New';
+    color: red;
+}
+
+pre {
+    font-size: 16px;
+}
+
+#submitButton {
+    backface-visibility: hidden;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    white-space: nowrap;
+    background: black;
+    border-radius: 5px;
+    border: 1px solid black;
+    border-width: 1px 1px 1px 1px;
+    padding: 7px 15px 7px 15px;
+    color: white;
+    font-size: 14px;
+    font-family: Verdana;
+}

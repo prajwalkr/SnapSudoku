@@ -13,14 +13,13 @@
     <body>
         <center>
             <h1>Snap Sudoku</h1>
-            <br>
+            <p>Take a picture of a Sudoku and have SnapSudoku solve it for you!</p>
             <form name="inputForm" id="inputForm" method="POST" action="" enctype="multipart/form-data">
                 <label for="file">Select an image:</label>
                 <input type="file" id="file" name="file" accept=".jpg,.jpeg,.png">
-                <br>
+                <p></p>
                 <button name="submitButton" id="submitButton" type="submit" onclick="submit()">Solve Puzzle!</button>
             </form>
-            <br>
             {% if result %}
             <h2>Solution</h2>
             <pre>{{ result }}</pre>
