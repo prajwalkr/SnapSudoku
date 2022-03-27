@@ -23,7 +23,7 @@ class Helpers(object):
         cv2.destroyAllWindows()
 
     def isCv2(self):
-        return cv2.__version__.startswith('2.')
+        return cv2.__version__.startswith('2.') or cv2.__version__.startswith('4.')
         
     def thresholdify(self, img):
         img = cv2.adaptiveThreshold(img.astype(np.uint8), 255, cv2.ADAPTIVE_THRESH_MEAN_C,
@@ -44,7 +44,7 @@ class Helpers(object):
             contours, h = cv2.findContours(
                 image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         else:
-            contours, h = cv2.findContours(
+            _, contours, h = cv2.findContours(
                 image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return max(contours, key=cv2.contourArea)
 
