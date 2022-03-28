@@ -1,0 +1,45 @@
+openapi: '3.0.2'
+info:
+  title: SnapSudoku Ainize API Swagger
+  description: SnapSudoku Ainize API Documentation
+  version: '1.0'
+  license:
+    name: MIT License
+    url: https://github.com/andrew27lee/SnapSudoku/blob/master/LICENSE.md
+  contact:
+    name: Ainizer - Andrew Lee
+    email: andrew.lee@comcom.ai
+
+servers:
+  - url: https://master-snap-sudoku-andrew27lee.endpoint.ainize.ai/
+
+paths:
+  /:
+    post:
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+            encoding:
+              file:
+                contentType: image/png, image/jpg, image/jpeg
+      responses:
+        '200':
+          description: Success
+          content:
+            string:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad Request
+        '404':
+          description: Model Not Found
+        '500':
+          description: Server Error
