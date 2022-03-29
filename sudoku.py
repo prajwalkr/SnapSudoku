@@ -51,7 +51,6 @@ def solve():
         if input_file.filename == '':
             return render_template('index.html', result='No file selected. Please try again.')
         input_file.save(os.path.join(app.root_path, 'static/images/input.jpg'))
-        print('helpme')
         solution = snap_sudoku('static/images/input.jpg')
         return render_template('index.html', result=solution)
     return render_template('index.html')
